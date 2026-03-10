@@ -1,0 +1,195 @@
+{
+  "folders": [
+    {
+      "id": "1",
+      "name": "Projects",
+      "parentId": null
+    },
+    {
+      "id": "2",
+      "name": "Assets",
+      "parentId": null
+    },
+    {
+      "id": "3",
+      "name": "Alpha",
+      "parentId": "1"
+    },
+    {
+      "id": "4",
+      "name": "folder1",
+      "parentId": null
+    },
+    {
+      "id": "1773149928062",
+      "name": "eraldo",
+      "parentId": "0"
+    },
+    {
+      "id": "1773150095387",
+      "name": "efv erv kre v",
+      "parentId": "0"
+    },
+    {
+      "id": "1773150129639",
+      "name": "efwfewf",
+      "parentId": "0"
+    },
+    {
+      "id": "1773150723687",
+      "name": "ffff",
+      "parentId": "0"
+    },
+    {
+      "id": "1773150732478",
+      "name": "wdknwkdwkn",
+      "parentId": "4"
+    },
+    {
+      "id": "1773151078474",
+      "name": "bgvtygtygyt",
+      "parentId": "0"
+    },
+    {
+      "id": "1773151096125",
+      "name": "top",
+      "parentId": "0"
+    },
+    {
+      "id": "1773151446564",
+      "name": "uidqwhuiduwqidb",
+      "parentId": "1773151403865"
+    },
+    {
+      "id": "1773151520567",
+      "name": "e reeee",
+      "parentId": "0"
+    },
+    {
+      "id": "1773152738479",
+      "name": "ddsv",
+      "parentId": "cmmkor4l000003b6om2iyp6lq"
+    },
+    {
+      "id": "1773153570454",
+      "name": "kledi 2",
+      "parentId": "1773153564460"
+    },
+    {
+      "id": "1773153737174",
+      "name": "klledi",
+      "parentId": "1773153717369"
+    },
+    {
+      "id": "1773154485836",
+      "name": "kledi",
+      "parentId": null
+    },
+    {
+      "id": "1773154536134",
+      "name": "afdadsf",
+      "parentId": null
+    },
+    {
+      "id": "1773154565175",
+      "name": "asdfasf",
+      "parentId": null
+    },
+    {
+      "id": "1773154599513",
+      "name": "klledi koqja",
+      "parentId": "1773154594720"
+    }
+  ],
+  "files": [
+    {
+      "id": "1",
+      "name": "design_v1.fig",
+      "folderId": "3",
+      "size": 2400000,
+      "ext": "fig",
+      "modified": "2025-03-01",
+      "tags": []
+    },
+    {
+      "id": "2",
+      "name": "hero.png",
+      "folderId": "3",
+      "size": 840000,
+      "ext": "png",
+      "modified": "2025-03-02",
+      "tags": []
+    },
+    {
+      "id": "3",
+      "name": "README.md",
+      "folderId": "1",
+      "size": 3200,
+      "ext": "md",
+      "modified": "2025-03-05",
+      "tags": []
+    },
+    {
+      "id": "4",
+      "name": "document.pdf",
+      "folderId": "4",
+      "size": 430443,
+      "ext": "pdf",
+      "modified": "2026-03-09",
+      "tags": []
+    },
+    {
+      "id": "1773150086964",
+      "name": "fewlk fwe f",
+      "folderId": null,
+      "size": 746237,
+      "ext": "fewlk fwe f",
+      "modified": "2026-03-10",
+      "tags": []
+    },
+    {
+      "id": "1773151425049",
+      "name": "kot.pdf",
+      "folderId": null,
+      "size": 727691,
+      "ext": "pdf",
+      "modified": "2026-03-10",
+      "tags": []
+    },
+    {
+      "id": "cmmkorcxq00013b6o9hu7n8sg",
+      "name": "dasddhd",
+      "folderId": null,
+      "size": 660415,
+      "ext": "dasddhd",
+      "modified": "2026-03-10",
+      "tags": []
+    },
+    {
+      "id": "cmmkpcshm00003b6ogkuzvg0q",
+      "name": "jjjj",
+      "folderId": null,
+      "size": 342776,
+      "ext": "jjjj",
+      "modified": "2026-03-10",
+      "tags": []
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "admin123",
+      "role": "admin",
+      "name": "Kledi"
+    },
+    {
+      "id": "2",
+      "username": "user",
+      "password": "user123",
+      "role": "user",
+      "name": "Makazze"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

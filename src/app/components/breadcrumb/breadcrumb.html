@@ -1,0 +1,15 @@
+<div class="px-3 py-2 border-bottom bg-white d-flex align-items-center gap-1 flex-wrap">
+  @for (crumb of breadcrumb; track crumb.id; let last = $last) {
+    @if (!last) {
+      <button
+        class="btn btn-link btn-sm text-muted p-0 text-decoration-none"
+        (click)="navigateTo(crumb.id)"
+      >
+        {{ crumb.name }}
+      </button>
+      <i class="bi bi-chevron-right text-muted small"></i>
+    } @else {
+      <span class="small fw-semibold text-dark">{{ crumb.name }}</span>
+    }
+  }
+</div>

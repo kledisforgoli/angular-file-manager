@@ -1,0 +1,73 @@
+<div class="d-flex flex-column" style="height: 100vh; overflow: hidden">
+  <!-- Navbar -->
+  <nav class="navbar navbar-dark bg-dark px-3 flex-shrink-0" style="height: 52px">
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-sm btn-outline-secondary me-1" (click)="toggleSidebar()">
+        <i class="bi bi-list"></i>
+      </button>
+      <span class="navbar-brand mb-0 h6 d-flex align-items-center gap-2">
+        <i class="bi bi-folder2-open text-primary"></i>
+        <span class="d-none d-sm-inline">FileBoard</span>
+      </span>
+    </div>
+
+    <div class="ms-auto d-flex align-items-center gap-2">
+      <span class="badge bg-secondary d-none d-sm-inline">
+        <i class="bi bi-person-circle me-1"></i>
+        {{ currentUser?.name }}
+      </span>
+      <span
+        class="badge"
+        [class.bg-danger]="currentUser?.role === 'admin'"
+        [class.bg-primary]="currentUser?.role === 'user'"
+      >
+        {{ currentUser?.role | uppercase }}
+      </span>
+      <button class="btn btn-sm btn-outline-danger" (click)="onLogout()">
+        <i class="bi bi-box-arrow-right"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Body -->
+  <div class="d-flex flex-grow-1 overflow-hidden position-relative">
+    <!-- Overlay për mobile -->
+    @if (isMobile && sidebarOpen) {
+      <div
+        class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50"
+        style="z-index: 1040"
+        (click)="toggleSidebar()"
+      ></div>
+    }
+
+    <!-- Sidebar — një bllok i vetëm -->
+    <div
+      class="bg-dark text-white border-end border-secondary"
+      [style.visibility]="sidebarOpen ? 'visible' : 'hidden'"
+      [style.width]="sidebarOpen ? '240px' : '0'"
+      [style.min-width]="sidebarOpen ? '240px' : '0'"
+      [style.position]="isMobile ? 'fixed' : 'relative'"
+      [style.left]="isMobile ? '0' : 'auto'"
+      [style.top]="isMobile ? '52px' : 'auto'"
+      [style.bottom]="isMobile ? '0' : 'auto'"
+      [style.z-index]="isMobile ? '1050' : 'auto'"
+      style="overflow-y: auto; transition: width 0.2s ease"
+    >
+      <app-sidebar
+        (folderSelected)="onFolderSelected($event)"
+        [selectedFolderId]="selectedFolderId"
+      />
+    </div>
+    <!-- Main Content -->
+    <div class="d-flex flex-column flex-grow-1 overflow-hidden">
+      <app-breadcrumb
+        [selectedFolderId]="selectedFolderId"
+        (folderSelected)="onFolderSelected($event)"
+      />
+      <app-file-list
+        [selectedFolderId]="selectedFolderId"
+        (folderSelected)="onFolderSelected($event)"
+      />
+    </div>
+  </div>
+</div>

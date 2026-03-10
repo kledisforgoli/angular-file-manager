@@ -1,0 +1,431 @@
+<div class="d-flex flex-column h-100">
+
+  <!-- Toolbar -->
+  <div class="px-3 py-2 border-bottom bg-white d-flex align-items-center gap-2 flex-wrap">
+
+    <!-- Search -->
+    <div class="input-group input-group-sm" style="max-width: 280px; min-width: 160px;">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search files..."
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="applyFilters()"
+      />
+      @if (searchQuery) {
+        <button class="btn btn-outline-secondary" (click)="searchQuery = ''; applyFilters()">
+          <i class="bi bi-x"></i>
+        </button>
+      }
+    </div>
+
+    <!-- Sort -->
+    <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="sortBy" (ngModelChange)="applyFilters()">
+      <option value="name">Name</option>
+      <option value="size">Size</option>
+      <option value="modified">Date</option>
+    </select>
+
+    <!-- Filter ext -->
+    <select class="form-select form-select-sm d-none d-md-block" style="width: auto;" [(ngModel)]="filterExt" (ngModelChange)="applyFilters()">
+      <option value="">All types</option>
+      @for (ext of allExtensions; track ext) {
+        <option [value]="ext">.{{ ext }}</option>
+      }
+    </select>
+
+    <!-- Batch delete -->
+    @if (selectedItems.length > 0) {
+      <button class="btn btn-sm btn-danger" (click)="deleteSelected()">
+        <i class="bi bi-trash3 me-1"></i>
+        <span class="d-none d-sm-inline">Delete</span>
+        ({{ selectedItems.length }})
+      </button>
+      <button class="btn btn-sm btn-outline-secondary" (click)="selectedItems = []">
+        <i class="bi bi-x d-sm-none"></i>
+        <span class="d-none d-sm-inline">Clear</span>
+      </button>
+    }
+
+    <div class="ms-auto d-flex gap-2">
+      <button class="btn btn-sm btn-outline-primary" (click)="showNewFolderModal = true">
+        <i class="bi bi-folder-plus"></i>
+        <span class="d-none d-md-inline ms-1">New Folder</span>
+      </button>
+      <button class="btn btn-sm btn-primary" (click)="showUploadModal = true">
+        <i class="bi bi-upload"></i>
+        <span class="d-none d-md-inline ms-1">Upload</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="flex-grow-1 overflow-auto p-2 p-md-3">
+
+    <!-- Subfolders -->
+    @if (getSubFolders().length > 0) {
+      <div class="mb-3">
+        <div class="text-muted small text-uppercase fw-semibold mb-2" style="font-size: 11px; letter-spacing: 0.08em;">Folders</div>
+        <div class="row g-2">
+          @for (folder of getSubFolders(); track folder.id) {
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+              <div class="card border h-100" style="cursor: pointer;">
+                <div class="card-body p-2 d-flex flex-column gap-1">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <input type="checkbox" class="form-check-input"
+                      (change)="toggleSelect(folder.id!)"
+                      [checked]="selectedItems.includes(folder.id!)"
+                      (click)="$event.stopPropagation()" />
+                    <div class="dropdown">
+                      <button class="btn btn-sm p-0 px-1" data-bs-toggle="dropdown" (click)="$event.stopPropagation()">
+                        <i class="bi bi-three-dots-vertical small"></i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end small">
+                        <li>
+                          <button class="dropdown-item" (click)="openRename(folder.id!, folder.name, 'folder')">
+                            <i class="bi bi-pencil me-2"></i>Rename
+                          </button>
+                        </li>
+                        <li>
+                          <button class="dropdown-item text-danger" (click)="deleteFolder(folder.id!)">
+                            <i class="bi bi-trash3 me-2"></i>Delete
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <i class="bi bi-folder-fill text-warning fs-4"></i>
+                  <div class="small text-truncate fw-semibold">{{ folder.name }}</div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Files — Desktop Table -->
+    @if (filteredFiles.length > 0) {
+      <div>
+        <div class="text-muted small text-uppercase fw-semibold mb-2" style="font-size: 11px; letter-spacing: 0.08em;">Files</div>
+
+        <!-- Table për desktop -->
+        <div class="table-responsive d-none d-md-block">
+          <table class="table table-hover table-sm align-middle">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 36px;">
+                  <input type="checkbox" class="form-check-input"
+                    (change)="toggleSelectAll()"
+                    [checked]="selectedItems.length === filteredFiles.length && filteredFiles.length > 0" />
+                </th>
+                <th style="cursor:pointer;" (click)="toggleSort('name')">
+                  Name
+                  <i class="bi" [class.bi-arrow-up]="sortBy === 'name' && sortDir === 'asc'"
+                    [class.bi-arrow-down]="sortBy === 'name' && sortDir === 'desc'"></i>
+                </th>
+                <th>Type</th>
+                <th style="cursor:pointer;" (click)="toggleSort('size')">
+                  Size
+                  <i class="bi" [class.bi-arrow-up]="sortBy === 'size' && sortDir === 'asc'"
+                    [class.bi-arrow-down]="sortBy === 'size' && sortDir === 'desc'"></i>
+                </th>
+                <th style="cursor:pointer;" (click)="toggleSort('modified')">
+                  Modified
+                  <i class="bi" [class.bi-arrow-up]="sortBy === 'modified' && sortDir === 'asc'"
+                    [class.bi-arrow-down]="sortBy === 'modified' && sortDir === 'desc'"></i>
+                </th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (file of filteredFiles; track file.id) {
+                <tr [class.table-active]="selectedItems.includes(file.id!)">
+                  <td>
+                    <input type="checkbox" class="form-check-input"
+                      (change)="toggleSelect(file.id!)"
+                      [checked]="selectedItems.includes(file.id!)" />
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <i class="bi bi-file-earmark text-{{ getExtColor(file.ext) }}"></i>
+                      <span class="small">{{ file.name }}</span>
+                      @for (tag of file.tags; track tag) {
+                        <span class="badge bg-secondary" style="font-size: 10px;">{{ tag }}</span>
+                      }
+                    </div>
+                  </td>
+                  <td><span class="badge bg-{{ getExtColor(file.ext) }}">{{ file.ext }}</span></td>
+                  <td class="small text-muted">{{ formatSize(file.size) }}</td>
+                  <td class="small text-muted">{{ file.modified }}</td>
+                  <td>
+                    <div class="d-flex gap-1">
+                      <button class="btn btn-sm btn-outline-secondary py-0 px-1" (click)="openPreview(file)" title="Preview">
+                        <i class="bi bi-eye small"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-secondary py-0 px-1" (click)="copyLink(file.id!)" title="Copy Link">
+                        <i class="bi bi-link-45deg small"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-secondary py-0 px-1" (click)="openRename(file.id!, file.name, 'file')" title="Rename">
+                        <i class="bi bi-pencil small"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger py-0 px-1" (click)="deleteFile(file.id!)" title="Delete">
+                        <i class="bi bi-trash3 small"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Karta për mobile -->
+        <div class="d-md-none">
+          @for (file of filteredFiles; track file.id) {
+            <div class="card mb-2" [class.border-primary]="selectedItems.includes(file.id!)">
+              <div class="card-body p-2">
+                <div class="d-flex align-items-center gap-2">
+                  <input type="checkbox" class="form-check-input flex-shrink-0"
+                    (change)="toggleSelect(file.id!)"
+                    [checked]="selectedItems.includes(file.id!)" />
+                  <i class="bi bi-file-earmark text-{{ getExtColor(file.ext) }} flex-shrink-0"></i>
+                  <div class="flex-grow-1 overflow-hidden">
+                    <div class="small fw-semibold text-truncate">{{ file.name }}</div>
+                    <div class="d-flex gap-2 text-muted" style="font-size: 11px;">
+                      <span><span class="badge bg-{{ getExtColor(file.ext) }}">{{ file.ext }}</span></span>
+                      <span>{{ formatSize(file.size) }}</span>
+                      <span>{{ file.modified }}</span>
+                    </div>
+                  </div>
+                  <button class="btn btn-sm btn-outline-secondary py-0 px-1 flex-shrink-0" (click)="openBottomSheet(file)">
+                    <i class="bi bi-three-dots-vertical small"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+      </div>
+    }
+
+    <!-- Empty state -->
+    @if (filteredFiles.length === 0 && getSubFolders().length === 0) {
+      <div class="d-flex flex-column align-items-center justify-content-center" style="height: 200px;">
+        <i class="bi bi-folder2-open fs-1 text-muted"></i>
+        <p class="text-muted mt-2">This folder is empty.</p>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-outline-primary" (click)="showNewFolderModal = true">
+            New Folder
+          </button>
+          <button class="btn btn-sm btn-primary" (click)="showUploadModal = true">
+            Upload first file
+          </button>
+        </div>
+      </div>
+    }
+
+  </div>
+
+  <!-- Status Bar -->
+  <div class="px-3 py-1 border-top bg-light d-flex gap-3 small text-muted" style="font-size: 11px;">
+    <span>{{ filteredFiles.length }} file(s)</span>
+    <span>·</span>
+    <span>{{ getSubFolders().length }} folder(s)</span>
+    @if (selectedItems.length > 0) {
+      <span>·</span>
+      <span class="text-primary">{{ selectedItems.length }} selected</span>
+    }
+  </div>
+
+</div>
+
+<!-- Upload Modal -->
+@if (showUploadModal) {
+  <div class="modal d-block" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title">Upload File</h6>
+          <button class="btn-close" (click)="showUploadModal = false"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3 rounded p-4 text-center text-muted" style="border: 2px dashed #dee2e6;">
+            <i class="bi bi-cloud-upload fs-2"></i>
+            <p class="small mt-2">Drag & drop (simulated)</p>
+          </div>
+          <label class="form-label small fw-semibold">File Name</label>
+          <input type="text" class="form-control" [(ngModel)]="newFileName"
+            placeholder="document.pdf"
+            (keydown.enter)="uploadFile()" autofocus />
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" (click)="showUploadModal = false">Cancel</button>
+          <button class="btn btn-primary btn-sm" (click)="uploadFile()">Upload</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- New Folder Modal -->
+@if (showNewFolderModal) {
+  <div class="modal d-block" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title">New Folder</h6>
+          <button class="btn-close" (click)="showNewFolderModal = false"></button>
+        </div>
+        <div class="modal-body">
+          <label class="form-label small fw-semibold">Folder Name</label>
+          <input type="text" class="form-control" [(ngModel)]="newFolderName"
+            placeholder="Untitled Folder"
+            (keydown.enter)="createFolder()" autofocus />
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" (click)="showNewFolderModal = false">Cancel</button>
+          <button class="btn btn-primary btn-sm" (click)="createFolder()">Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Rename Modal -->
+@if (showRenameModal) {
+  <div class="modal d-block" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title">Rename</h6>
+          <button class="btn-close" (click)="showRenameModal = false"></button>
+        </div>
+        <div class="modal-body">
+          <label class="form-label small fw-semibold">New Name</label>
+          <input type="text" class="form-control" [(ngModel)]="renameValue"
+            (keydown.enter)="confirmRename()" autofocus />
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" (click)="showRenameModal = false">Cancel</button>
+          <button class="btn btn-primary btn-sm" (click)="confirmRename()">Rename</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Preview Modal -->
+@if (showPreviewModal && previewFile) {
+  <div class="modal d-block" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title d-flex align-items-center gap-2">
+            <i class="bi bi-file-earmark text-{{ getExtColor(previewFile.ext) }}"></i>
+            {{ previewFile.name }}
+          </h6>
+          <button class="btn-close" (click)="showPreviewModal = false"></button>
+        </div>
+        <div class="modal-body">
+          @if (['png','jpg','svg','gif'].includes(previewFile.ext)) {
+            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 160px;">
+              <span class="text-muted small">[Image Preview — {{ previewFile.name }}]</span>
+            </div>
+          } @else if (['txt','md'].includes(previewFile.ext)) {
+            <div class="bg-light rounded p-3 font-monospace small" style="min-height: 100px;">
+              # Sample content for {{ previewFile.name }}
+            </div>
+          } @else {
+            <div class="bg-light rounded d-flex align-items-center justify-content-center gap-3" style="height: 100px;">
+              <i class="bi bi-file-earmark fs-2 text-{{ getExtColor(previewFile.ext) }}"></i>
+              <div>
+                <div class="fw-semibold">.{{ previewFile.ext }} file</div>
+                <div class="small text-muted">{{ formatSize(previewFile.size) }}</div>
+              </div>
+            </div>
+          }
+          <div class="row mt-3 g-2 small text-muted">
+            <div class="col-6"><span class="fw-semibold">Size:</span> {{ formatSize(previewFile.size) }}</div>
+            <div class="col-6"><span class="fw-semibold">Modified:</span> {{ previewFile.modified }}</div>
+            <div class="col-6"><span class="fw-semibold">Type:</span> .{{ previewFile.ext }}</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" (click)="showPreviewModal = false">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Confirm Modal -->
+@if (showConfirmModal) {
+  <div class="modal d-block" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title text-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>Confirm Delete
+          </h6>
+          <button class="btn-close" (click)="showConfirmModal = false"></button>
+        </div>
+        <div class="modal-body">
+          <p class="small mb-0">{{ confirmMessage }}</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" (click)="showConfirmModal = false">Cancel</button>
+          <button class="btn btn-danger btn-sm" (click)="confirmAction && confirmAction(); showConfirmModal = false">
+            <i class="bi bi-trash3 me-1"></i>Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Bottom Sheet Mobile -->
+@if (showBottomSheet && bottomSheetFile) {
+  <div class="position-fixed top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.5); z-index: 9998;" (click)="showBottomSheet = false">
+  </div>
+  <div class="position-fixed bottom-0 start-0 w-100 bg-white rounded-top shadow-lg" style="z-index: 9999;">
+    <div class="p-3 border-bottom d-flex align-items-center gap-2">
+      <i class="bi bi-file-earmark text-{{ getExtColor(bottomSheetFile.ext) }}"></i>
+      <span class="small fw-semibold text-truncate">{{ bottomSheetFile.name }}</span>
+    </div>
+    <div class="p-2">
+      <button class="btn btn-light w-100 text-start mb-1" (click)="openPreview(bottomSheetFile); showBottomSheet = false">
+        <i class="bi bi-eye me-2 text-primary"></i>Preview
+      </button>
+      <button class="btn btn-light w-100 text-start mb-1" (click)="copyLink(bottomSheetFile.id!); showBottomSheet = false">
+        <i class="bi bi-link-45deg me-2 text-primary"></i>Copy Link
+      </button>
+      <button class="btn btn-light w-100 text-start mb-1" (click)="openRename(bottomSheetFile.id!, bottomSheetFile.name, 'file'); showBottomSheet = false">
+        <i class="bi bi-pencil me-2 text-primary"></i>Rename
+      </button>
+      <button class="btn btn-light w-100 text-start text-danger mb-1" (click)="deleteFile(bottomSheetFile.id!); showBottomSheet = false">
+        <i class="bi bi-trash3 me-2"></i>Delete
+      </button>
+    </div>
+    <div class="p-2 border-top">
+      <button class="btn btn-secondary w-100 btn-sm" (click)="showBottomSheet = false">Cancel</button>
+    </div>
+  </div>
+}
+
+<!-- Toast -->
+@if (toast) {
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
+    <div class="toast show align-items-center border-0"
+      [class.text-bg-success]="toast.type === 'success'"
+      [class.text-bg-warning]="toast.type === 'warning'"
+      [class.text-bg-primary]="toast.type === 'info'">
+      <div class="d-flex">
+        <div class="toast-body small">{{ toast.message }}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" (click)="toast = null"></button>
+      </div>
+    </div>
+  </div>
+}
