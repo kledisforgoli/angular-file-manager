@@ -13,7 +13,7 @@ import cuid from 'cuid';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './file-list.html',
-  styleUrl: './file-list.css'
+  styleUrl: './file-list.css',
 })
 export class FileListComponent implements OnChanges, OnInit {
   @Input() selectedFolderId: string | number = 0;
@@ -21,6 +21,8 @@ export class FileListComponent implements OnChanges, OnInit {
 
   allFiles: File[] = [];
   folders: Folder[] = [];
+  subFolders: Folder[] = [];
+
   filteredFiles: File[] = [];
   selectedItems: (string | number)[] = [];
   searchQuery = '';
@@ -54,32 +56,39 @@ export class FileListComponent implements OnChanges, OnInit {
   constructor(
     private fileService: FileService,
     private folderService: FolderService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
     this.isAdmin = this.authService.isAdmin();
     this.loadAll();
+
+    this.folderService.folderChanged$.subscribe(() => {
+      this.loadAll();
+    });
   }
 
   ngOnChanges(): void {
-    this.loadAll();
+    this.subFolders = this.getSubFolders();
+    this.applyFilters();
   }
 
   loadAll(): void {
-    this.folderService.getFolders().subscribe(folders => {
+    this.folderService.getFolders().subscribe((folders) => {
       this.folders = folders;
+      this.subFolders = this.getSubFolders();
+      this.applyFilters();
     });
 
-    this.fileService.getFiles().subscribe(files => {
+    this.fileService.getFiles().subscribe((files) => {
       this.allFiles = files;
-      this.allExtensions = [...new Set(files.map(f => f.ext).filter(Boolean))];
+      this.allExtensions = [...new Set(files.map((f) => f.ext).filter(Boolean))];
       this.applyFilters();
     });
   }
 
   applyFilters(): void {
-    let result = this.allFiles.filter(f => {
+    let result = this.allFiles.filter((f) => {
       if (this.selectedFolderId == 0) {
         return f.folderId === null || f.folderId === undefined;
       }
@@ -87,20 +96,25 @@ export class FileListComponent implements OnChanges, OnInit {
     });
 
     if (this.searchQuery) {
-      result = result.filter(f =>
-        f.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
+      result = result.filter((f) => f.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
     }
 
     if (this.filterExt) {
-      result = result.filter(f => f.ext === this.filterExt);
+      result = result.filter((f) => f.ext === this.filterExt);
     }
 
     result.sort((a, b) => {
       let va: any, vb: any;
-      if (this.sortBy === 'name') { va = a.name.toLowerCase(); vb = b.name.toLowerCase(); }
-      else if (this.sortBy === 'size') { va = a.size; vb = b.size; }
-      else { va = a.modified; vb = b.modified; }
+      if (this.sortBy === 'name') {
+        va = a.name.toLowerCase();
+        vb = b.name.toLowerCase();
+      } else if (this.sortBy === 'size') {
+        va = a.size;
+        vb = b.size;
+      } else {
+        va = a.modified;
+        vb = b.modified;
+      }
       if (va < vb) return this.sortDir === 'asc' ? -1 : 1;
       if (va > vb) return this.sortDir === 'asc' ? 1 : -1;
       return 0;
@@ -111,11 +125,9 @@ export class FileListComponent implements OnChanges, OnInit {
 
   getSubFolders(): Folder[] {
     if (this.selectedFolderId == 0) {
-      return this.folders.filter(f => f.parentId === null);
+      return this.folders.filter((f) => f.parentId === null);
     }
-    return this.folders.filter(f =>
-      String(f.parentId) === String(this.selectedFolderId)
-    );
+    return this.folders.filter((f) => String(f.parentId) === String(this.selectedFolderId));
   }
 
   uploadFile(): void {
@@ -128,7 +140,7 @@ export class FileListComponent implements OnChanges, OnInit {
       size: Math.floor(Math.random() * 900000 + 1000),
       ext,
       modified: new Date().toISOString().split('T')[0],
-      tags: []
+      tags: [],
     };
     this.fileService.uploadFile(file as unknown as File).subscribe({
       next: () => {
@@ -136,7 +148,7 @@ export class FileListComponent implements OnChanges, OnInit {
         this.newFileName = '';
         this.loadAll();
         this.showToast('File uploaded successfully!', 'success');
-      }
+      },
     });
   }
 
@@ -146,7 +158,7 @@ export class FileListComponent implements OnChanges, OnInit {
     const folder = {
       id: newId,
       name: this.newFolderName.trim(),
-      parentId: this.selectedFolderId == 0 ? null : String(this.selectedFolderId)
+      parentId: this.selectedFolderId == 0 ? null : String(this.selectedFolderId),
     };
     debugger;
     this.folderService.createFolder(folder as unknown as Folder).subscribe({
@@ -156,7 +168,7 @@ export class FileListComponent implements OnChanges, OnInit {
         this.folderSelected.emit(newId);
         this.loadAll();
         this.showToast('Folder created!', 'success');
-      }
+      },
     });
   }
 
@@ -175,7 +187,7 @@ export class FileListComponent implements OnChanges, OnInit {
           this.loadAll();
           this.showRenameModal = false;
           this.showToast('Renamed successfully!', 'success');
-        }
+        },
       });
     } else {
       this.folderService.updateFolder(this.renameId, { name: this.renameValue }).subscribe({
@@ -183,7 +195,7 @@ export class FileListComponent implements OnChanges, OnInit {
           this.loadAll();
           this.showRenameModal = false;
           this.showToast('Renamed successfully!', 'success');
-        }
+        },
       });
     }
   }
@@ -200,7 +212,7 @@ export class FileListComponent implements OnChanges, OnInit {
         next: () => {
           this.loadAll();
           this.showToast('File deleted.', 'warning');
-        }
+        },
       });
     });
   }
@@ -211,29 +223,32 @@ export class FileListComponent implements OnChanges, OnInit {
         next: () => {
           this.loadAll();
           this.showToast('Folder deleted.', 'warning');
-        }
+        },
       });
     });
   }
 
   deleteSelected(): void {
     if (!this.selectedItems.length) return;
-    this.openConfirm(`Are you sure you want to delete ${this.selectedItems.length} item(s)?`, () => {
-      const ids = [...this.selectedItems];
-      let completed = 0;
-      ids.forEach(id => {
-        this.fileService.deleteFile(id).subscribe({
-          next: () => {
-            completed++;
-            if (completed === ids.length) {
-              this.selectedItems = [];
-              this.loadAll();
-              this.showToast('Items deleted.', 'warning');
-            }
-          }
+    this.openConfirm(
+      `Are you sure you want to delete ${this.selectedItems.length} item(s)?`,
+      () => {
+        const ids = [...this.selectedItems];
+        let completed = 0;
+        ids.forEach((id) => {
+          this.fileService.deleteFile(id).subscribe({
+            next: () => {
+              completed++;
+              if (completed === ids.length) {
+                this.selectedItems = [];
+                this.loadAll();
+                this.showToast('Items deleted.', 'warning');
+              }
+            },
+          });
         });
-      });
-    });
+      },
+    );
   }
 
   openBottomSheet(file: File): void {
@@ -243,7 +258,7 @@ export class FileListComponent implements OnChanges, OnInit {
 
   toggleSelect(id: string | number): void {
     if (this.selectedItems.includes(id)) {
-      this.selectedItems = this.selectedItems.filter(i => i !== id);
+      this.selectedItems = this.selectedItems.filter((i) => i !== id);
     } else {
       this.selectedItems.push(id);
     }
@@ -253,7 +268,7 @@ export class FileListComponent implements OnChanges, OnInit {
     if (this.selectedItems.length === this.filteredFiles.length) {
       this.selectedItems = [];
     } else {
-      this.selectedItems = this.filteredFiles.map(f => f.id!);
+      this.selectedItems = this.filteredFiles.map((f) => f.id!);
     }
   }
 
@@ -276,10 +291,16 @@ export class FileListComponent implements OnChanges, OnInit {
 
   getExtColor(ext: string): string {
     const colors: Record<string, string> = {
-      png: 'success', jpg: 'success', svg: 'success', gif: 'success',
-      pdf: 'danger', fig: 'warning',
-      md: 'primary', txt: 'secondary',
-      xlsx: 'success', csv: 'success',
+      png: 'success',
+      jpg: 'success',
+      svg: 'success',
+      gif: 'success',
+      pdf: 'danger',
+      fig: 'warning',
+      md: 'primary',
+      txt: 'secondary',
+      xlsx: 'success',
+      csv: 'success',
     };
     return colors[ext?.toLowerCase()] || 'secondary';
   }
@@ -296,6 +317,13 @@ export class FileListComponent implements OnChanges, OnInit {
 
   showToast(message: string, type: string): void {
     this.toast = { message, type };
-    setTimeout(() => this.toast = null, 3000);
+    setTimeout(() => (this.toast = null), 3000);
+  }
+
+  navigateToFolder(id: string | number): void {
+    this.selectedFolderId = id; // ← update lokal menjëherë
+    this.subFolders = this.getSubFolders();
+    this.applyFilters();
+    this.folderSelected.emit(id);
   }
 }

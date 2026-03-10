@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FolderService } from '../../services/folder.service';
 import { Folder } from '../../models/folder.model';
@@ -8,9 +8,9 @@ import { Folder } from '../../models/folder.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './breadcrumb.html',
-  styleUrl: './breadcrumb.css'
+  styleUrl: './breadcrumb.css',
 })
-export class BreadcrumbComponent implements OnChanges {
+export class BreadcrumbComponent implements OnInit, OnChanges {
   @Input() selectedFolderId: string | number = 0;
   @Output() folderSelected = new EventEmitter<string | number>();
 
@@ -19,32 +19,47 @@ export class BreadcrumbComponent implements OnChanges {
 
   constructor(private folderService: FolderService) {}
 
-  ngOnChanges(): void {
+  ngOnInit(): void {
     this.folderService.getFolders().subscribe({
       next: (folders) => {
         this.folders = folders;
         this.buildBreadcrumb();
-      }
+      },
+    });
+
+    // Rifresko kur krijohen/fshihen folders
+    this.folderService.folderChanged$.subscribe(() => {
+      this.folderService.getFolders().subscribe({
+        next: (folders) => {
+          this.folders = folders;
+          this.buildBreadcrumb();
+        },
+      });
     });
   }
 
-buildBreadcrumb(): void {
-  this.breadcrumb = [{ id: 0, name: 'My Drive' }];
-
-  if (this.selectedFolderId == 0) return;
-
-  const path: { id: string | number; name: string }[] = [];
-  let current = this.folders.find(f => String(f.id) === String(this.selectedFolderId));
-
-  while (current) {
-    path.unshift({ id: current.id ?? '', name: current.name });
-    current = current.parentId !== null
-      ? this.folders.find(f => String(f.id) === String(current!.parentId))
-      : undefined;
+  ngOnChanges(): void {
+    // folders tashmë ekzistojnë — ndërto menjëherë pa HTTP
+    this.buildBreadcrumb();
   }
 
-  this.breadcrumb = [{ id: 0, name: 'My Drive' }, ...path];
-}
+  buildBreadcrumb(): void {
+    this.breadcrumb = [{ id: 0, name: 'My Drive' }];
+    if (this.selectedFolderId == 0) return;
+
+    const path: { id: string | number; name: string }[] = [];
+    let current = this.folders.find((f) => String(f.id) === String(this.selectedFolderId));
+
+    while (current) {
+      path.unshift({ id: current.id ?? '', name: current.name });
+      current =
+        current.parentId !== null
+          ? this.folders.find((f) => String(f.id) === String(current!.parentId))
+          : undefined;
+    }
+
+    this.breadcrumb = [{ id: 0, name: 'My Drive' }, ...path];
+  }
 
   navigateTo(id: string | number): void {
     this.folderSelected.emit(id);

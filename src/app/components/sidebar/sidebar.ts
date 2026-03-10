@@ -24,6 +24,10 @@ export class SidebarComponent implements OnInit {
   showNewFolderInput = false;
   isAdmin = false;
 
+  showConfirmModal = false;
+  confirmMessage = '';
+  confirmAction: (() => void) | null = null;
+
   constructor(
     private folderService: FolderService,
     private authService: AuthService,
@@ -33,10 +37,6 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.isAdmin = this.authService.isAdmin();
     this.loadFolders();
-
-    this.folderService.folderChanged$.subscribe(() => {
-      this.loadFolders();
-    });
   }
 
   loadFolders(): void {
@@ -44,7 +44,7 @@ export class SidebarComponent implements OnInit {
       next: (folders) => {
         this.folders = folders;
         this.buildTree();
-        this.cdr.detectChanges(); // ← force re-render
+        this.cdr.detectChanges();
       },
       error: () => console.error('Failed to load folders'),
     });
@@ -60,7 +60,7 @@ export class SidebarComponent implements OnInit {
         this.childMap[key].push(folder);
       }
     }
-    this.childMap = { ...this.childMap }; // ← new reference
+    this.childMap = { ...this.childMap };
   }
 
   isSelected(id: string | number): boolean {
@@ -68,6 +68,7 @@ export class SidebarComponent implements OnInit {
   }
 
   selectFolder(id: string | number): void {
+    this.selectedFolderId = id;
     this.folderSelected.emit(String(id));
   }
 
@@ -83,30 +84,51 @@ export class SidebarComponent implements OnInit {
       name: this.newFolderName.trim(),
       parentId: this.selectedFolderId == 0 ? null : String(this.selectedFolderId),
     };
-    this.folderService.createFolder(folder as Folder).subscribe({
+
+    // Shto optimistically menjëherë
+    const newFolder = folder as Folder;
+    this.folders = [...this.folders, newFolder];
+    this.buildTree();
+    this.cdr.detectChanges();
+
+    this.folderService.createFolder(newFolder).subscribe({
       next: () => {
         this.newFolderName = '';
         this.showNewFolderInput = false;
         this.folderSelected.emit(newId);
-        this.loadFolders();
+        this.loadFolders(); // sync me serverin
+      },
+      error: () => {
+        // rollback
+        this.folders = this.folders.filter((f) => f.id !== newId);
+        this.buildTree();
+        this.cdr.detectChanges();
       },
     });
   }
 
   deleteFolder(id: string | number, event: Event): void {
     event.stopPropagation();
-    const confirmed = window.confirm('Are you sure you want to delete this folder?');
-    if (!confirmed) return;
+    this.openConfirm('Are you sure you want to delete this folder?', () => {
+      // Optimistic update menjëherë
+      this.folders = this.folders.filter((f) => String(f.id) !== String(id));
+      this.buildTree();
+      this.cdr.detectChanges();
 
-    // Optimistic update
-    this.folders = this.folders.filter((f) => String(f.id) !== String(id));
-    this.buildTree();
-    this.cdr.detectChanges(); // ← force re-render menjëherë
-
-    this.folderService.deleteFolder(id).subscribe({
-      error: () => {
-        this.loadFolders(); // rollback nëse dështon
-      },
+      this.folderService.deleteFolder(id).subscribe({
+        next: () => {
+          if (String(this.selectedFolderId) === String(id)) {
+            this.folderSelected.emit(0);
+          }
+        },
+        error: () => this.loadFolders(), // rollback
+      });
     });
+  }
+
+  openConfirm(message: string, action: () => void): void {
+    this.confirmMessage = message;
+    this.confirmAction = action;
+    this.showConfirmModal = true;
   }
 }
