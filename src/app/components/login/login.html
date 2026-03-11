@@ -16,7 +16,7 @@
         </div>
       }
 
-      <!-- Form -->
+      <!-- Username -->
       <div class="mb-3">
         <label class="form-label small fw-semibold">USERNAME</label>
         <input
@@ -25,18 +25,40 @@
           [(ngModel)]="username"
           placeholder="Enter username"
           (keydown.enter)="onLogin()"
+          [class.is-invalid]="(submitted && !username) || errorField === 'both'"
         />
+        @if (submitted && !username) {
+          <div class="invalid-feedback d-block">Username is required.</div>
+        }
+        @if (errorField === 'both') {
+          <div class="invalid-feedback d-block">Invalid username or password.</div>
+        }
       </div>
 
+      <!-- Password -->
       <div class="mb-4">
         <label class="form-label small fw-semibold">PASSWORD</label>
-        <input
-          type="password"
-          class="form-control"
-          [(ngModel)]="password"
-          placeholder="Enter password"
-          (keydown.enter)="onLogin()"
-        />
+        <div class="input-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            class="form-control"
+            [(ngModel)]="password"
+            placeholder="Enter password"
+            (keydown.enter)="onLogin()"
+            [class.is-invalid]="(submitted && !password) || errorField === 'both'"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="showPassword = !showPassword"
+            tabindex="-1"
+          >
+            <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+          </button>
+          @if (submitted && !password) {
+            <div class="invalid-feedback d-block">Password is required.</div>
+          }
+        </div>
       </div>
 
       <button
@@ -50,12 +72,11 @@
         Sign In
       </button>
 
-      <!-- Demo accounts -->
-      <!-- <div class="mt-3 p-3 bg-light rounded small text-muted">
-        <div class="fw-semibold mb-1">Demo accounts:</div>
-        <div>admin / admin123 — <span class="text-purple">Admin</span></div>
-        <div>user / user123 — <span class="text-primary">User</span></div>
-      </div> -->
+      <!-- Register link -->
+      <div class="text-center mt-3 small">
+        <span class="text-muted">Don't have an account? </span>
+        <a routerLink="/register" class="text-primary fw-semibold text-decoration-none">Register</a>
+      </div>
 
     </div>
   </div>

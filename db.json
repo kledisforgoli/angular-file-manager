@@ -81,11 +81,6 @@
       "parentId": null
     },
     {
-      "id": "1773154536134",
-      "name": "afdadsf",
-      "parentId": null
-    },
-    {
       "id": "1773154599513",
       "name": "klledi koqja",
       "parentId": "1773154594720"
@@ -109,6 +104,16 @@
       "id": "cmmktemhq00003b6ogs1dyfd7",
       "name": "testtest",
       "parentId": "3"
+    },
+    {
+      "id": "cmmktm02400003b6oja4fsxp3",
+      "name": "test 1",
+      "parentId": "1773159054588"
+    },
+    {
+      "id": "1773159980226",
+      "name": "kledis forgoli",
+      "parentId": null
     }
   ],
   "files": [
@@ -210,6 +215,24 @@
       "ext": "kledis",
       "modified": "2026-03-10",
       "tags": []
+    },
+    {
+      "id": "cmmktv81k00013b6om2l2liaa",
+      "name": "foto",
+      "folderId": "1773159980226",
+      "size": 502501,
+      "ext": "foto",
+      "modified": "2026-03-10",
+      "tags": []
+    },
+    {
+      "id": "cmmktvflj00023b6oawnphs82",
+      "name": "video",
+      "folderId": "1773159980226",
+      "size": 611785,
+      "ext": "video",
+      "modified": "2026-03-10",
+      "tags": []
     }
   ],
   "users": [
@@ -226,6 +249,20 @@
       "password": "user123",
       "role": "user",
       "name": "Makazze"
+    },
+    {
+      "id": "1773218175237",
+      "name": "Kledis Forgoli",
+      "username": "kledis",
+      "password": "Kledis1111",
+      "role": "user"
+    },
+    {
+      "id": "1773220369842",
+      "name": "eraldo forgoli",
+      "username": "eraldo",
+      "password": "eraldo",
+      "role": "user"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

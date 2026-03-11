@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, switchMap } from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable({
@@ -12,15 +12,41 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(username: string, password: string): Observable<User | null> {
-    return this.http.get<User[]>(`${this.apiUrl}?username=${username}&password=${password}`).pipe(
-      map(users => {
-        if (users.length > 0) {
-          this.currentUser = users[0];
-          localStorage.setItem('currentUser', JSON.stringify(users[0]));
-          return users[0];
+login(username: string, password: string): Observable<User | null> {
+  return this.http.get<User[]>(this.apiUrl).pipe(
+    map(users => {
+      const user = users.find(
+        u => u.username === username && u.password === password
+      );
+      if (user) {
+        this.currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        return user;
+      }
+      return null;
+    })
+  );
+}
+
+  register(name: string, username: string, password: string): Observable<User | null> {
+    return this.http.get<User[]>(`${this.apiUrl}?username=${username}`).pipe(
+      switchMap(existing => {
+        if (existing.length > 0) {
+          throw new Error('USERNAME_EXISTS');
         }
-        return null;
+        const newUser = {
+          id: String(Date.now()),
+          name,
+          username,
+          password,
+          role: 'user'
+        };
+        return this.http.post<User>(this.apiUrl, newUser);
+      }),
+      map(user => {
+        this.currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        return user;
       })
     );
   }
