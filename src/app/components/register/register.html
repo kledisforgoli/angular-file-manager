@@ -2,93 +2,108 @@
   <div class="card shadow" style="width: 440px;">
     <div class="card-body p-4">
 
-      <!-- Header -->
       <div class="text-center mb-4">
         <i class="bi bi-folder2-open fs-1 text-primary"></i>
         <h4 class="mt-2 fw-bold">FileBoard</h4>
         <p class="text-muted small">Create your account</p>
       </div>
 
-      <!-- Error -->
+      @if (successMessage) {
+        <div class="alert alert-success py-2 small">
+          <i class="bi bi-check-circle me-1"></i>{{ successMessage }}
+        </div>
+      }
+
       @if (errorMessage) {
         <div class="alert alert-danger py-2 small">
           <i class="bi bi-exclamation-circle me-1"></i>{{ errorMessage }}
         </div>
       }
 
-      <!-- Name -->
       <div class="mb-3">
         <label class="form-label small fw-semibold">FULL NAME</label>
         <input
           type="text"
-          class="form-control"
+          class="form-control custom-input"
           [(ngModel)]="name"
           placeholder="Enter your full name"
           (keydown.enter)="onRegister()"
           [class.is-invalid]="nameError"
-          [class.is-valid]="name && !nameError"
         />
         @if (nameError) {
-          <div class="invalid-feedback">{{ nameError }}</div>
+          <div class="invalid-feedback d-block">{{ nameError }}</div>
         }
       </div>
 
-      <!-- Username -->
       <div class="mb-3">
         <label class="form-label small fw-semibold">USERNAME</label>
         <input
           type="text"
-          class="form-control"
+          class="form-control custom-input"
           [(ngModel)]="username"
           placeholder="Choose a username"
           (keydown.enter)="onRegister()"
           [class.is-invalid]="usernameError"
-          [class.is-valid]="username && !usernameError"
         />
         @if (usernameError) {
-          <div class="invalid-feedback">{{ usernameError }}</div>
+          <div class="invalid-feedback d-block">{{ usernameError }}</div>
         }
       </div>
 
-      <!-- Password -->
       <div class="mb-3">
         <label class="form-label small fw-semibold">PASSWORD</label>
-        <input
-          type="password"
-          class="form-control"
-          [(ngModel)]="password"
-          placeholder="At least 6 characters"
-          (keydown.enter)="onRegister()"
-          [class.is-invalid]="passwordError"
-          [class.is-valid]="password && !passwordError"
-        />
+        <div class="input-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            class="form-control custom-input"
+            [(ngModel)]="password"
+            placeholder="At least 6 characters"
+            (keydown.enter)="onRegister()"
+            [class.is-invalid]="passwordError"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="showPassword = !showPassword"
+            tabindex="-1"
+          >
+            <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+          </button>
+        </div>
         @if (passwordError) {
-          <div class="invalid-feedback">{{ passwordError }}</div>
+          <div class="invalid-feedback d-block">{{ passwordError }}</div>
         }
       </div>
 
-      <!-- Confirm Password -->
       <div class="mb-4">
         <label class="form-label small fw-semibold">CONFIRM PASSWORD</label>
-        <input
-          type="password"
-          class="form-control"
-          [(ngModel)]="confirmPassword"
-          placeholder="Repeat your password"
-          (keydown.enter)="onRegister()"
-          [class.is-invalid]="confirmPasswordError"
-          [class.is-valid]="confirmPassword && !confirmPasswordError"
-        />
+        <div class="input-group">
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            class="form-control custom-input"
+            [(ngModel)]="confirmPassword"
+            placeholder="Repeat your password"
+            (keydown.enter)="onRegister()"
+            [class.is-invalid]="confirmPasswordError"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="showConfirmPassword = !showConfirmPassword"
+            tabindex="-1"
+          >
+            <i class="bi" [class.bi-eye]="!showConfirmPassword" [class.bi-eye-slash]="showConfirmPassword"></i>
+          </button>
+        </div>
         @if (confirmPasswordError) {
-          <div class="invalid-feedback">{{ confirmPasswordError }}</div>
+          <div class="invalid-feedback d-block">{{ confirmPasswordError }}</div>
         }
       </div>
 
-      <!-- Submit -->
       <button
         class="btn btn-primary w-100"
         (click)="onRegister()"
-        [disabled]="loading || !isFormValid"
+        [disabled]="loading || !!successMessage"
       >
         @if (loading) {
           <span class="spinner-border spinner-border-sm me-2"></span>
@@ -96,7 +111,6 @@
         Create Account
       </button>
 
-      <!-- Login link -->
       <div class="text-center mt-3 small">
         <span class="text-muted">Already have an account? </span>
         <a routerLink="/login" class="text-primary fw-semibold text-decoration-none">Sign In</a>

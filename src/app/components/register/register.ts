@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -17,9 +17,16 @@ export class RegisterComponent {
   password = '';
   confirmPassword = '';
   errorMessage = '';
+  successMessage = '';
   loading = false;
+  showPassword = false;
+  showConfirmPassword = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   get nameError(): string {
     if (!this.name) return '';
@@ -64,11 +71,17 @@ export class RegisterComponent {
 
     this.loading = true;
     this.errorMessage = '';
+    this.successMessage = '';
 
     this.authService.register(this.name.trim(), this.username, this.password).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/']);
+        this.authService.logout();
+        this.successMessage = 'Account created successfully! Redirecting to login...';
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
       },
       error: (err) => {
         this.loading = false;
@@ -77,6 +90,7 @@ export class RegisterComponent {
         } else {
           this.errorMessage = 'Server error. Please try again.';
         }
+        this.cdr.detectChanges();
       }
     });
   }

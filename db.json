@@ -101,16 +101,6 @@
       "parentId": "1773159059033"
     },
     {
-      "id": "cmmktemhq00003b6ogs1dyfd7",
-      "name": "testtest",
-      "parentId": "3"
-    },
-    {
-      "id": "cmmktm02400003b6oja4fsxp3",
-      "name": "test 1",
-      "parentId": "1773159054588"
-    },
-    {
       "id": "1773159980226",
       "name": "kledis forgoli",
       "parentId": null
@@ -133,15 +123,6 @@
       "size": 840000,
       "ext": "png",
       "modified": "2025-03-02",
-      "tags": []
-    },
-    {
-      "id": "3",
-      "name": "README.md",
-      "folderId": "1",
-      "size": 3200,
-      "ext": "md",
-      "modified": "2025-03-05",
       "tags": []
     },
     {
@@ -262,6 +243,41 @@
       "name": "eraldo forgoli",
       "username": "eraldo",
       "password": "eraldo",
+      "role": "user"
+    },
+    {
+      "id": "1773222619233",
+      "name": "alo",
+      "username": "alooo",
+      "password": "alo123",
+      "role": "user"
+    },
+    {
+      "id": "1773222644514",
+      "name": "jfaowejdjaewkd",
+      "username": "efewf",
+      "password": "123456",
+      "role": "user"
+    },
+    {
+      "id": "1773222707346",
+      "name": "forgoli",
+      "username": "forgoli",
+      "password": "forgoli",
+      "role": "user"
+    },
+    {
+      "id": "1773232620195",
+      "name": "kleo",
+      "username": "kleo",
+      "password": "kleo123",
+      "role": "user"
+    },
+    {
+      "id": "1773233623320",
+      "name": "www",
+      "username": "www",
+      "password": "wwwwww",
       "role": "user"
     }
   ],
