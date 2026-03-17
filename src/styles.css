@@ -106,3 +106,20 @@ body {
 [data-theme="light"] .bg-secondary.badge {
   background-color: #6c757d !important;
 }
+
+[data-theme="dark"] .custom-input::placeholder {
+  color: #adb5bd !important;
+}
+
+[data-theme="dark"] .custom-input {
+  color: #f8f9fa !important;
+  background-color: #2c3034 !important;
+  border-color: #495057 !important;
+}
+
+[data-theme="dark"] .custom-input:focus {
+  background-color: #2c3034 !important;
+  color: #f8f9fa !important;
+  border-color: #adb5bd !important;
+  box-shadow: 0 0 0 2px rgba(173, 181, 189, 0.25) !important;
+}
