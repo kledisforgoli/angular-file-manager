@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { ThemeService } from '../../services/theme.service';
 import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
 import { SidebarComponent } from '../sidebar/sidebar';
@@ -20,7 +21,11 @@ export class LayoutComponent implements OnInit {
   selectedFolderId: string | number = 0;
   isMobile = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    public themeService: ThemeService
+  ) {}
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
@@ -30,11 +35,7 @@ export class LayoutComponent implements OnInit {
   @HostListener('window:resize')
   checkScreenSize(): void {
     this.isMobile = window.innerWidth < 768;
-    if (this.isMobile) {
-      this.sidebarOpen = false;
-    } else {
-      this.sidebarOpen = true;
-    }
+    this.sidebarOpen = !this.isMobile;
   }
 
   onLogout(): void {
@@ -46,10 +47,10 @@ export class LayoutComponent implements OnInit {
     this.sidebarOpen = !this.sidebarOpen;
   }
 
-onFolderSelected(folderId: string | number): void {
-  this.selectedFolderId = folderId;
-  if (this.isMobile) {
-    this.sidebarOpen = false;
+  onFolderSelected(folderId: string | number): void {
+    this.selectedFolderId = folderId;
+    if (this.isMobile) {
+      this.sidebarOpen = false;
+    }
   }
-}
 }

@@ -1,0 +1,108 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+}
+
+[data-theme="dark"] {
+  --bg-primary: #212529;
+  --bg-secondary: #2c3034;
+  --bg-card: #2c3034;
+  --text-primary: #f8f9fa;
+  --text-secondary: #adb5bd;
+  --border-color: #495057;
+  --input-bg: #2c3034;
+  --input-text: #f8f9fa;
+  --input-border: #495057;
+  --hover-bg: rgba(255,255,255,0.05);
+  --table-stripe: rgba(255,255,255,0.03);
+}
+
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-card: #ffffff;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --border-color: #dee2e6;
+  --input-bg: #ffffff;
+  --input-text: #212529;
+  --input-border: #ced4da;
+  --hover-bg: rgba(0,0,0,0.03);
+  --table-stripe: rgba(0,0,0,0.02);
+}
+
+[data-theme="light"] .bg-dark {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .text-white {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .border-secondary {
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="light"] .navbar.bg-dark {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="light"] .table {
+  color: var(--text-primary);
+  --bs-table-striped-bg: var(--table-stripe);
+}
+
+[data-theme="light"] .form-control {
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border-color: var(--input-border);
+}
+
+[data-theme="light"] .modal-content {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .dropdown-menu {
+  background-color: var(--bg-card);
+  border-color: var(--border-color);
+}
+
+[data-theme="light"] .dropdown-item {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .dropdown-item:hover {
+  background-color: var(--hover-bg);
+}
+
+[data-theme="light"] .card {
+  background-color: var(--bg-card);
+  border-color: var(--border-color);
+}
+
+[data-theme="light"] .list-group-item {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="light"] .btn-outline-secondary {
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+[data-theme="light"] .bg-secondary.badge {
+  background-color: #6c757d !important;
+}

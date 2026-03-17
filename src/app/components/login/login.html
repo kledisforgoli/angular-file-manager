@@ -1,11 +1,27 @@
-<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
-  <div class="card shadow" style="width: 400px;">
+<div
+  class="min-vh-100 d-flex align-items-center justify-content-center"
+  [class.bg-light]="!themeService.darkMode"
+  [class.bg-dark]="themeService.darkMode"
+>
+  <div
+    class="card shadow"
+    style="width: 400px;"
+    [class.bg-dark]="themeService.darkMode"
+    [class.text-white]="themeService.darkMode"
+    [class.border-secondary]="themeService.darkMode"
+  >
     <div class="card-body p-4">
 
+      
       <div class="text-center mb-4">
         <i class="bi bi-folder2-open fs-1 text-primary"></i>
         <h4 class="mt-2 fw-bold">FileBoard</h4>
-        <p class="text-muted small">Log in to your File Management System</p>
+        <p class="small"
+          [class.text-muted]="!themeService.darkMode"
+          [class.text-secondary]="themeService.darkMode"
+        >
+          Log in to your File Management System
+        </p>
       </div>
 
       @if (errorMessage) {
@@ -23,6 +39,9 @@
           placeholder="Enter username"
           (keydown.enter)="onLogin()"
           [class.is-invalid]="(submitted && !username) || errorField === 'both'"
+          [class.bg-dark]="themeService.darkMode"
+          [class.text-white]="themeService.darkMode"
+          [class.border-secondary]="themeService.darkMode"
         />
         @if (submitted && !username) {
           <div class="invalid-feedback d-block">Username is required.</div>
@@ -39,12 +58,17 @@
             placeholder="Enter password"
             (keydown.enter)="onLogin()"
             [class.is-invalid]="(submitted && !password) || errorField === 'both'"
+            [class.bg-dark]="themeService.darkMode"
+            [class.text-white]="themeService.darkMode"
+            [class.border-secondary]="themeService.darkMode"
           />
           <button
-            class="btn btn-outline-secondary"
+            class="btn"
             type="button"
             (click)="showPassword = !showPassword"
             tabindex="-1"
+            [class.btn-outline-secondary]="!themeService.darkMode"
+            [class.btn-secondary]="themeService.darkMode"
           >
             <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
           </button>
@@ -65,9 +89,21 @@
         Sign In
       </button>
 
-      <div class="text-center mt-3 small">
-        <span class="text-muted">Don't have an account? </span>
-        <a routerLink="/register" class="text-primary fw-semibold text-decoration-none">Register</a>
+      <div class="d-flex justify-content-between align-items-center mt-3 small">
+        <div>
+          <span
+            [class.text-muted]="!themeService.darkMode"
+            [class.text-secondary]="themeService.darkMode"
+          >Don't have an account?</span>
+          <a routerLink="/register" class="text-primary fw-semibold text-decoration-none ms-1">Register</a>
+        </div>
+        <button
+          class="btn btn-sm btn-outline-secondary"
+          (click)="themeService.toggleTheme()"
+          [title]="themeService.darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+        >
+          <i class="bi" [class.bi-sun]="themeService.darkMode" [class.bi-moon]="!themeService.darkMode"></i>
+        </button>
       </div>
 
     </div>

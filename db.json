@@ -298,6 +298,13 @@
       "username": "www",
       "password": "wwwwww",
       "role": "user"
+    },
+    {
+      "id": "1773737771053",
+      "name": "Kledis Forgoli",
+      "username": "kledis_forgoli",
+      "password": "Kledis1111",
+      "role": "user"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

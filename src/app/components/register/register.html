@@ -1,12 +1,27 @@
-<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
-  <div class="card shadow" style="width: 440px;">
+<div
+  class="min-vh-100 d-flex align-items-center justify-content-center"
+  [class.bg-light]="!themeService.darkMode"
+  [class.bg-dark]="themeService.darkMode"
+>
+  <div
+    class="card shadow"
+    style="width: 440px;"
+    [class.bg-dark]="themeService.darkMode"
+    [class.text-white]="themeService.darkMode"
+    [class.border-secondary]="themeService.darkMode"
+  >
     <div class="card-body p-4">
+
 
       <div class="text-center mb-4">
         <i class="bi bi-folder2-open fs-1 text-primary"></i>
         <h4 class="mt-2 fw-bold">FileBoard</h4>
-        <p class="text-muted small">Create your account</p>
+        <p class="small"
+          [class.text-muted]="!themeService.darkMode"
+          [class.text-secondary]="themeService.darkMode"
+        >Create your account</p>
       </div>
+
 
       @if (successMessage) {
         <div class="alert alert-success py-2 small">
@@ -14,11 +29,13 @@
         </div>
       }
 
+
       @if (errorMessage) {
         <div class="alert alert-danger py-2 small">
           <i class="bi bi-exclamation-circle me-1"></i>{{ errorMessage }}
         </div>
       }
+
 
       <div class="mb-3">
         <label class="form-label small fw-semibold">FULL NAME</label>
@@ -29,11 +46,15 @@
           placeholder="Enter your full name"
           (keydown.enter)="onRegister()"
           [class.is-invalid]="nameError"
+          [class.bg-dark]="themeService.darkMode"
+          [class.text-white]="themeService.darkMode"
+          [class.border-secondary]="themeService.darkMode"
         />
         @if (nameError) {
           <div class="invalid-feedback d-block">{{ nameError }}</div>
         }
       </div>
+
 
       <div class="mb-3">
         <label class="form-label small fw-semibold">USERNAME</label>
@@ -44,11 +65,15 @@
           placeholder="Choose a username"
           (keydown.enter)="onRegister()"
           [class.is-invalid]="usernameError"
+          [class.bg-dark]="themeService.darkMode"
+          [class.text-white]="themeService.darkMode"
+          [class.border-secondary]="themeService.darkMode"
         />
         @if (usernameError) {
           <div class="invalid-feedback d-block">{{ usernameError }}</div>
         }
       </div>
+
 
       <div class="mb-3">
         <label class="form-label small fw-semibold">PASSWORD</label>
@@ -60,12 +85,17 @@
             placeholder="At least 6 characters"
             (keydown.enter)="onRegister()"
             [class.is-invalid]="passwordError"
+            [class.bg-dark]="themeService.darkMode"
+            [class.text-white]="themeService.darkMode"
+            [class.border-secondary]="themeService.darkMode"
           />
           <button
-            class="btn btn-outline-secondary"
+            class="btn"
             type="button"
             (click)="showPassword = !showPassword"
             tabindex="-1"
+            [class.btn-outline-secondary]="!themeService.darkMode"
+            [class.btn-secondary]="themeService.darkMode"
           >
             <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
           </button>
@@ -74,6 +104,7 @@
           <div class="invalid-feedback d-block">{{ passwordError }}</div>
         }
       </div>
+
 
       <div class="mb-4">
         <label class="form-label small fw-semibold">CONFIRM PASSWORD</label>
@@ -85,12 +116,17 @@
             placeholder="Repeat your password"
             (keydown.enter)="onRegister()"
             [class.is-invalid]="confirmPasswordError"
+            [class.bg-dark]="themeService.darkMode"
+            [class.text-white]="themeService.darkMode"
+            [class.border-secondary]="themeService.darkMode"
           />
           <button
-            class="btn btn-outline-secondary"
+            class="btn"
             type="button"
             (click)="showConfirmPassword = !showConfirmPassword"
             tabindex="-1"
+            [class.btn-outline-secondary]="!themeService.darkMode"
+            [class.btn-secondary]="themeService.darkMode"
           >
             <i class="bi" [class.bi-eye]="!showConfirmPassword" [class.bi-eye-slash]="showConfirmPassword"></i>
           </button>
@@ -99,6 +135,7 @@
           <div class="invalid-feedback d-block">{{ confirmPasswordError }}</div>
         }
       </div>
+
 
       <button
         class="btn btn-primary w-100"
@@ -111,9 +148,22 @@
         Create Account
       </button>
 
-      <div class="text-center mt-3 small">
-        <span class="text-muted">Already have an account? </span>
-        <a routerLink="/login" class="text-primary fw-semibold text-decoration-none">Sign In</a>
+
+      <div class="d-flex justify-content-between align-items-center mt-3 small">
+        <div>
+          <span
+            [class.text-muted]="!themeService.darkMode"
+            [class.text-secondary]="themeService.darkMode"
+          >Already have an account?</span>
+          <a routerLink="/login" class="text-primary fw-semibold text-decoration-none ms-1">Sign In</a>
+        </div>
+        <button
+          class="btn btn-sm btn-outline-secondary"
+          (click)="themeService.toggleTheme()"
+          [title]="themeService.darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+        >
+          <i class="bi" [class.bi-sun]="themeService.darkMode" [class.bi-moon]="!themeService.darkMode"></i>
+        </button>
       </div>
 
     </div>
