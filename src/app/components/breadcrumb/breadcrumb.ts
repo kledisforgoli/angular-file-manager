@@ -27,7 +27,6 @@ export class BreadcrumbComponent implements OnInit, OnChanges {
       },
     });
 
-    // Rifresko kur krijohen/fshihen folders
     this.folderService.folderChanged$.subscribe(() => {
       this.folderService.getFolders().subscribe({
         next: (folders) => {
@@ -39,7 +38,6 @@ export class BreadcrumbComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    // folders tashmë ekzistojnë — ndërto menjëherë pa HTTP
     this.buildBreadcrumb();
   }
 

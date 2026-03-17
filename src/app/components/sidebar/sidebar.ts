@@ -99,7 +99,6 @@ export class SidebarComponent implements OnInit {
         this.loadFolders(); // sync me serverin
       },
       error: () => {
-        // rollback
         this.folders = this.folders.filter((f) => f.id !== newId);
         this.buildTree();
         this.cdr.detectChanges();
@@ -110,7 +109,7 @@ export class SidebarComponent implements OnInit {
   deleteFolder(id: string | number, event: Event): void {
     event.stopPropagation();
     this.openConfirm('Are you sure you want to delete this folder?', () => {
-      // Optimistic update menjëherë
+      
       this.folders = this.folders.filter((f) => String(f.id) !== String(id));
       this.buildTree();
       this.cdr.detectChanges();

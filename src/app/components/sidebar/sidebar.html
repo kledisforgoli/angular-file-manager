@@ -1,5 +1,5 @@
 <div class="p-2">
-  <!-- Header -->
+
   <div
     class="d-flex align-items-center justify-content-between px-2 py-2 border-bottom border-secondary mb-2"
   >
@@ -17,7 +17,7 @@
     </button>
   </div>
 
-  <!-- New Folder Input -->
+
   <div class="px-2 mb-2 d-flex gap-1" *ngIf="showNewFolderInput">
     <input
       type="text"
@@ -33,7 +33,6 @@
     </button>
   </div>
 
-  <!-- Root item: My Drive -->
   <div
     class="d-flex align-items-center gap-2 px-2 py-1 rounded mb-1"
     [class.bg-primary]="selectedFolderId == 0"
@@ -45,9 +44,8 @@
     <span class="small">My Drive</span>
   </div>
 
-  <!-- Folder Tree -->
   <div *ngFor="let folder of rootFolders; trackBy: trackById">
-    <!-- Root level folder -->
+
     <div
       class="d-flex align-items-center justify-content-between px-2 py-1 rounded"
       [class.bg-primary]="isSelected(folder.id!)"
@@ -67,7 +65,7 @@
       </button>
     </div>
 
-    <!-- Child folders -->
+
     <div
       *ngFor="let child of childMap[folder.id!] || []; trackBy: trackById"
       class="d-flex align-items-center justify-content-between px-2 py-1 rounded"
@@ -90,7 +88,7 @@
   </div>
 </div>
 
-<!-- Confirm Modal -->
+
 <div *ngIf="showConfirmModal" class="modal d-block" style="background: rgba(0,0,0,0.5); z-index: 9999;">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
