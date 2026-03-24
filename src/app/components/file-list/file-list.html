@@ -326,7 +326,7 @@
           <button class="btn-close" (click)="showUploadModal = false"></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3 rounded p-4 text-center text-muted" style="border: 2px dashed #dee2e6">
+          <div class="mb-3 rounded p-4 text-center text-muted" style="border: 2px dashed var(--drop-zone-border, #dee2e6)">
             <i class="bi bi-cloud-upload fs-2"></i>
             <p class="small mt-2">Drag & drop (simulated)</p>
           </div>
@@ -495,8 +495,8 @@
     (click)="showBottomSheet = false"
   ></div>
   <div
-    class="position-fixed bottom-0 start-0 w-100 bg-white rounded-top shadow-lg"
-    style="z-index: 9999"
+    class="position-fixed bottom-0 start-0 w-100 rounded-top shadow-lg"
+    style="z-index: 9999; background-color: var(--bg-card, #ffffff)"
   >
     <div class="p-3 border-bottom d-flex align-items-center gap-2">
       <i class="bi bi-file-earmark text-{{ getExtColor(bottomSheetFile.ext) }}"></i>
