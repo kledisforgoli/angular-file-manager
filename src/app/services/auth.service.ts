@@ -71,4 +71,23 @@ login(username: string, password: string): Observable<User | null> {
   isAdmin(): boolean {
     return this.getCurrentUser()?.role === 'admin';
   }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.apiUrl);
+  }
+
+  addUser(user: { name: string; username: string; password: string; role: string }): Observable<User> {
+    return this.http.get<User[]>(`${this.apiUrl}?username=${user.username}`).pipe(
+      switchMap(existing => {
+        if (existing.length > 0) {
+          throw new Error('USERNAME_EXISTS');
+        }
+        return this.http.post<User>(this.apiUrl, { ...user, id: String(Date.now()) });
+      })
+    );
+  }
+
+  deleteUser(id: string | number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

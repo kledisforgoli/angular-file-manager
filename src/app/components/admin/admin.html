@@ -1,0 +1,243 @@
+<div class="d-flex flex-column" style="height: 100vh; overflow: hidden">
+
+  <nav class="navbar px-3 flex-shrink-0" style="height: 52px"
+    [class.navbar-dark]="themeService.darkMode"
+    [class.bg-dark]="themeService.darkMode"
+    [class.navbar-light]="!themeService.darkMode"
+    [class.bg-white]="!themeService.darkMode"
+    [class.border-bottom]="!themeService.darkMode"
+  >
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-sm btn-outline-secondary" (click)="goBack()" title="Back to Files">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <span class="navbar-brand mb-0 h6 d-flex align-items-center gap-2">
+        <i class="bi bi-shield-lock text-danger"></i>
+        <span>Admin Panel</span>
+      </span>
+    </div>
+    <div class="ms-auto d-flex align-items-center gap-2">
+      <button
+        class="btn btn-sm btn-outline-secondary"
+        (click)="themeService.toggleTheme()"
+        [title]="themeService.darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+      >
+        <i class="bi" [class.bi-sun]="themeService.darkMode" [class.bi-moon]="!themeService.darkMode"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-danger" (click)="onLogout()">
+        <i class="bi bi-box-arrow-right"></i>
+      </button>
+    </div>
+  </nav>
+
+  <div class="flex-grow-1 overflow-auto p-3 p-md-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h5 class="mb-0 fw-semibold">
+        <i class="bi bi-people me-2"></i>User Management
+        <span class="badge bg-secondary ms-2" style="font-size: 12px">{{ users.length }}</span>
+      </h5>
+      <button class="btn btn-sm btn-primary" (click)="openAddModal()">
+        <i class="bi bi-person-plus me-1"></i>
+        <span class="d-none d-sm-inline">Add User</span>
+      </button>
+    </div>
+
+    <div class="table-responsive d-none d-md-block">
+      <table class="table table-hover table-sm align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th style="width: 100px">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users; track user.id) {
+            <tr>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-person-circle text-secondary"></i>
+                  <span class="small">{{ user.name }}</span>
+                </div>
+              </td>
+              <td class="small text-muted">&#64;{{ user.username }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [class.bg-danger]="user.role === 'admin'"
+                  [class.bg-primary]="user.role === 'user'"
+                >
+                  {{ user.role | uppercase }}
+                </span>
+              </td>
+              <td>
+                @if (!isCurrentUser(user)) {
+                  <button
+                    class="btn btn-sm btn-outline-danger py-0 px-1"
+                    (click)="deleteUser(user)"
+                    title="Delete user"
+                  >
+                    <i class="bi bi-trash3 small"></i>
+                  </button>
+                } @else {
+                  <span class="badge bg-secondary" style="font-size: 10px">You</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-md-none">
+      @for (user of users; track user.id) {
+        <div class="card mb-2">
+          <div class="card-body p-2">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-person-circle text-secondary flex-shrink-0"></i>
+              <div class="flex-grow-1 overflow-hidden">
+                <div class="small fw-semibold text-truncate">{{ user.name }}</div>
+                <div class="d-flex gap-2 align-items-center" style="font-size: 11px">
+                  <span class="text-muted">&#64;{{ user.username }}</span>
+                  <span
+                    class="badge"
+                    [class.bg-danger]="user.role === 'admin'"
+                    [class.bg-primary]="user.role === 'user'"
+                  >
+                    {{ user.role | uppercase }}
+                  </span>
+                </div>
+              </div>
+              @if (!isCurrentUser(user)) {
+                <button
+                  class="btn btn-sm btn-outline-danger py-0 px-1 flex-shrink-0"
+                  (click)="deleteUser(user)"
+                >
+                  <i class="bi bi-trash3 small"></i>
+                </button>
+              } @else {
+                <span class="badge bg-secondary" style="font-size: 10px">You</span>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (users.length === 0) {
+      <div class="d-flex flex-column align-items-center justify-content-center" style="height: 200px">
+        <i class="bi bi-people fs-1 text-muted"></i>
+        <p class="text-muted mt-2">No users found.</p>
+      </div>
+    }
+  </div>
+</div>
+
+@if (showAddModal) {
+  <div class="modal d-block" style="background: rgba(0, 0, 0, 0.5)">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title">
+            <i class="bi bi-person-plus me-2"></i>Add User
+          </h6>
+          <button class="btn-close" (click)="showAddModal = false"></button>
+        </div>
+        <div class="modal-body">
+          @if (addError) {
+            <div class="alert alert-danger small py-2">{{ addError }}</div>
+          }
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Full Name</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="newUser.name"
+              placeholder="Full Name"
+              autofocus
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="newUser.username"
+              placeholder="username"
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              [(ngModel)]="newUser.password"
+              placeholder="Min. 6 characters"
+            />
+          </div>
+          <div class="mb-0">
+            <label class="form-label small fw-semibold">Role</label>
+            <select class="form-select" [(ngModel)]="newUser.role">
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" (click)="showAddModal = false">Cancel</button>
+          <button class="btn btn-primary btn-sm" (click)="addUser()">
+            <i class="bi bi-person-plus me-1"></i>Add User
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+@if (showConfirmModal) {
+  <div class="modal d-block" style="background: rgba(0, 0, 0, 0.5)">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title text-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>Confirm Delete
+          </h6>
+          <button class="btn-close" (click)="showConfirmModal = false"></button>
+        </div>
+        <div class="modal-body">
+          <p class="small mb-0">{{ confirmMessage }}</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" (click)="showConfirmModal = false">Cancel</button>
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="confirmAction && confirmAction(); showConfirmModal = false"
+          >
+            <i class="bi bi-trash3 me-1"></i>Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+@if (toast) {
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+    <div
+      class="toast show align-items-center border-0"
+      [class.text-bg-success]="toast.type === 'success'"
+      [class.text-bg-warning]="toast.type === 'warning'"
+      [class.text-bg-primary]="toast.type === 'info'"
+    >
+      <div class="d-flex">
+        <div class="toast-body small">{{ toast.message }}</div>
+        <button
+          type="button"
+          class="btn-close btn-close-white me-2 m-auto"
+          (click)="toast = null"
+        ></button>
+      </div>
+    </div>
+  </div>
+}
