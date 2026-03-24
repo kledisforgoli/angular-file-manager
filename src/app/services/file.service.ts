@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { File } from '../models/file.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,14 +10,22 @@ import { File } from '../models/file.model';
 export class FileService {
   private apiUrl = 'http://localhost:3000/files';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  private getUserId(): string {
+    return String(this.authService.getCurrentUser()?.id ?? '');
+  }
 
   getFiles(): Observable<File[]> {
-    return this.http.get<File[]>(this.apiUrl);
+    return this.http.get<File[]>(this.apiUrl).pipe(
+      map(files => files.filter(f => String(f.userId) === this.getUserId()))
+    );
   }
 
   getFilesByFolder(folderId: number): Observable<File[]> {
-    return this.http.get<File[]>(`${this.apiUrl}?folderId=${folderId}`);
+    return this.http.get<File[]>(`${this.apiUrl}?folderId=${folderId}`).pipe(
+      map(files => files.filter(f => String(f.userId) === this.getUserId()))
+    );
   }
 
   uploadFile(file: Omit<File, 'id'>): Observable<File> {

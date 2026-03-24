@@ -137,6 +137,7 @@ export class FileListComponent implements OnChanges, OnInit {
       id: cuid(),
       name: this.newFileName.trim(),
       folderId: this.selectedFolderId == 0 ? null : String(this.selectedFolderId),
+      userId: String(this.authService.getCurrentUser()?.id ?? ''),
       size: Math.floor(Math.random() * 900000 + 1000),
       ext,
       modified: new Date().toISOString().split('T')[0],
@@ -159,8 +160,8 @@ export class FileListComponent implements OnChanges, OnInit {
       id: newId,
       name: this.newFolderName.trim(),
       parentId: this.selectedFolderId == 0 ? null : String(this.selectedFolderId),
+      userId: String(this.authService.getCurrentUser()?.id ?? ''),
     };
-    debugger;
     this.folderService.createFolder(folder as unknown as Folder).subscribe({
       next: () => {
         this.showNewFolderModal = false;

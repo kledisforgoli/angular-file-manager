@@ -37,6 +37,10 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.isAdmin = this.authService.isAdmin();
     this.loadFolders();
+
+    this.folderService.folderChanged$.subscribe(() => {
+      this.loadFolders();
+    });
   }
 
   loadFolders(): void {
@@ -83,9 +87,9 @@ export class SidebarComponent implements OnInit {
       id: newId,
       name: this.newFolderName.trim(),
       parentId: this.selectedFolderId == 0 ? null : String(this.selectedFolderId),
+      userId: String(this.authService.getCurrentUser()?.id ?? ''),
     };
 
-    // Shto optimistically menjëherë
     const newFolder = folder as Folder;
     this.folders = [...this.folders, newFolder];
     this.buildTree();
@@ -96,7 +100,7 @@ export class SidebarComponent implements OnInit {
         this.newFolderName = '';
         this.showNewFolderInput = false;
         this.folderSelected.emit(newId);
-        this.loadFolders(); // sync me serverin
+        this.loadFolders();
       },
       error: () => {
         this.folders = this.folders.filter((f) => f.id !== newId);

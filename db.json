@@ -3,117 +3,188 @@
     {
       "id": "1",
       "name": "Projects",
-      "parentId": null
+      "parentId": null,
+      "userId": "1"
     },
     {
       "id": "2",
       "name": "Assets",
-      "parentId": null
+      "parentId": null,
+      "userId": "1"
     },
     {
       "id": "3",
       "name": "Alpha",
-      "parentId": "1"
+      "parentId": "1",
+      "userId": "1"
     },
     {
       "id": "4",
       "name": "folder1",
-      "parentId": null
+      "parentId": null,
+      "userId": "1"
     },
     {
       "id": "1773149928062",
       "name": "eraldo",
-      "parentId": "0"
+      "parentId": "0",
+      "userId": "1"
     },
     {
       "id": "1773150095387",
       "name": "efv erv kre v",
-      "parentId": "0"
+      "parentId": "0",
+      "userId": "1"
     },
     {
       "id": "1773150129639",
       "name": "efwfewf",
-      "parentId": "0"
+      "parentId": "0",
+      "userId": "1"
     },
     {
       "id": "1773150723687",
       "name": "ffff",
-      "parentId": "0"
+      "parentId": "0",
+      "userId": "1"
     },
     {
       "id": "1773151078474",
       "name": "bgvtygtygyt",
-      "parentId": "0"
+      "parentId": "0",
+      "userId": "1"
     },
     {
       "id": "1773151096125",
       "name": "top",
-      "parentId": "0"
+      "parentId": "0",
+      "userId": "1"
     },
     {
       "id": "1773151446564",
       "name": "uidqwhuiduwqidb",
-      "parentId": "1773151403865"
+      "parentId": "1773151403865",
+      "userId": "1"
     },
     {
       "id": "1773151520567",
       "name": "e reeee",
-      "parentId": "0"
+      "parentId": "0",
+      "userId": "1"
     },
     {
       "id": "1773152738479",
       "name": "ddsv",
-      "parentId": "cmmkor4l000003b6om2iyp6lq"
+      "parentId": "cmmkor4l000003b6om2iyp6lq",
+      "userId": "1"
     },
     {
       "id": "1773153570454",
       "name": "kledi 2",
-      "parentId": "1773153564460"
+      "parentId": "1773153564460",
+      "userId": "1"
     },
     {
       "id": "1773153737174",
       "name": "klledi",
-      "parentId": "1773153717369"
+      "parentId": "1773153717369",
+      "userId": "1"
     },
     {
       "id": "1773154485836",
       "name": "kledi",
-      "parentId": null
+      "parentId": null,
+      "userId": "1"
     },
     {
       "id": "1773154599513",
       "name": "klledi koqja",
-      "parentId": "1773154594720"
+      "parentId": "1773154594720",
+      "userId": "1"
     },
     {
       "id": "1773156556596",
       "name": "cs2",
-      "parentId": "1773154599513"
+      "parentId": "1773154599513",
+      "userId": "1"
     },
     {
       "id": "1773159054588",
       "name": "test",
-      "parentId": null
+      "parentId": null,
+      "userId": "1"
     },
     {
       "id": "cmmkte0oi00013b6od9m8l425",
       "name": "test 3",
-      "parentId": "1773159059033"
+      "parentId": "1773159059033",
+      "userId": "1"
     },
     {
       "id": "1773159980226",
       "name": "kledis forgoli",
-      "parentId": null
+      "parentId": null,
+      "userId": "1"
     },
     {
       "id": "1773392025961",
       "name": "shembull",
-      "parentId": null
+      "parentId": null,
+      "userId": "1"
     },
     {
       "id": "cmmonvucf00013b6q1tmcvq70",
       "name": "iucii",
-      "parentId": "1773392025961"
+      "parentId": "1773392025961",
+      "userId": "1"
+    },
+    {
+      "id": "cmn4jhobd00003b6qk9btl9cw",
+      "name": "kledis",
+      "parentId": null,
+      "userId": "2"
+    },
+    {
+      "id": "1774352409990",
+      "name": "asdwad",
+      "parentId": null,
+      "userId": "1"
+    },
+    {
+      "id": "cmn4ju3t900003b6qpi9nhczn",
+      "name": "eljaaa",
+      "parentId": "1774352778865",
+      "userId": "1773218175237"
+    },
+    {
+      "id": "1774352842501",
+      "name": "adhisifhas",
+      "parentId": null,
+      "userId": "1773222707346"
+    },
+    {
+      "id": "1774354068610",
+      "name": "dasdoaw",
+      "parentId": null,
+      "userId": "1774354056519"
+    },
+    {
+      "id": "1774354510807",
+      "name": "kledis",
+      "parentId": null,
+      "userId": "1773218175237"
+    },
+    {
+      "id": "1774374539693",
+      "name": "TEST1",
+      "parentId": null,
+      "userId": "1"
+    },
+    {
+      "id": "1774374557829",
+      "name": "TEST2",
+      "parentId": null,
+      "userId": "1773218175237"
     }
   ],
   "files": [
@@ -121,6 +192,7 @@
       "id": "1",
       "name": "design_v1.fig",
       "folderId": "3",
+      "userId": "1",
       "size": 2400000,
       "ext": "fig",
       "modified": "2025-03-01",
@@ -130,6 +202,7 @@
       "id": "2",
       "name": "hero.png",
       "folderId": "3",
+      "userId": "1",
       "size": 840000,
       "ext": "png",
       "modified": "2025-03-02",
@@ -139,6 +212,7 @@
       "id": "4",
       "name": "document.pdf",
       "folderId": "4",
+      "userId": "1",
       "size": 430443,
       "ext": "pdf",
       "modified": "2026-03-09",
@@ -148,6 +222,7 @@
       "id": "1773150086964",
       "name": "fewlk fwe f",
       "folderId": null,
+      "userId": "1",
       "size": 746237,
       "ext": "fewlk fwe f",
       "modified": "2026-03-10",
@@ -157,6 +232,7 @@
       "id": "1773151425049",
       "name": "kot.pdf",
       "folderId": null,
+      "userId": "1",
       "size": 727691,
       "ext": "pdf",
       "modified": "2026-03-10",
@@ -166,6 +242,7 @@
       "id": "cmmkorcxq00013b6o9hu7n8sg",
       "name": "dasddhd",
       "folderId": null,
+      "userId": "1",
       "size": 660415,
       "ext": "dasddhd",
       "modified": "2026-03-10",
@@ -175,6 +252,7 @@
       "id": "cmmkpcshm00003b6ogkuzvg0q",
       "name": "jjjj",
       "folderId": null,
+      "userId": "1",
       "size": 342776,
       "ext": "jjjj",
       "modified": "2026-03-10",
@@ -184,6 +262,7 @@
       "id": "cmmkrnb0k00003b6o8leyauvd",
       "name": "cs2.pdf",
       "folderId": null,
+      "userId": "1",
       "size": 156716,
       "ext": "pdf",
       "modified": "2026-03-10",
@@ -193,6 +272,7 @@
       "id": "cmmkrns7400013b6o1weygmxd",
       "name": "cs2.img",
       "folderId": null,
+      "userId": "1",
       "size": 659793,
       "ext": "img",
       "modified": "2026-03-10",
@@ -202,6 +282,7 @@
       "id": "cmmktdlgv00003b6oeectt6en",
       "name": "kledis",
       "folderId": null,
+      "userId": "1",
       "size": 838058,
       "ext": "kledis",
       "modified": "2026-03-10",
@@ -211,6 +292,7 @@
       "id": "cmmktv81k00013b6om2l2liaa",
       "name": "foto",
       "folderId": "1773159980226",
+      "userId": "1",
       "size": 502501,
       "ext": "foto",
       "modified": "2026-03-10",
@@ -220,6 +302,7 @@
       "id": "cmmktvflj00023b6oawnphs82",
       "name": "video",
       "folderId": "1773159980226",
+      "userId": "1",
       "size": 611785,
       "ext": "video",
       "modified": "2026-03-10",
@@ -229,9 +312,30 @@
       "id": "cmmm5s3u500003b6q7kv4qjqs",
       "name": "klediii.pdf",
       "folderId": "1773154485836",
+      "userId": "1",
       "size": 813441,
       "ext": "pdf",
       "modified": "2026-03-11",
+      "tags": []
+    },
+    {
+      "id": "cmn4ju8du00013b6qk8dippyt",
+      "name": "eljaaa.pdf",
+      "folderId": "cmn4ju3t900003b6qpi9nhczn",
+      "userId": "1773218175237",
+      "size": 380739,
+      "ext": "pdf",
+      "modified": "2026-03-24",
+      "tags": []
+    },
+    {
+      "id": "cmn4kvld600003b6qtaohhboe",
+      "name": "kledis.pdf",
+      "folderId": "1774354510807",
+      "userId": "1773218175237",
+      "size": 853380,
+      "ext": "pdf",
+      "modified": "2026-03-24",
       "tags": []
     }
   ],
@@ -304,6 +408,13 @@
       "name": "Kledis Forgoli",
       "username": "kledis_forgoli",
       "password": "Kledis1111",
+      "role": "user"
+    },
+    {
+      "id": "1774354056519",
+      "name": "elja",
+      "username": "elja",
+      "password": "elja1111",
       "role": "user"
     }
   ],

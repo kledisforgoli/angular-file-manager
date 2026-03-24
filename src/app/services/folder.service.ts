@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Folder } from '../models/folder.model';
 import { Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,10 +12,16 @@ import { tap } from 'rxjs/operators';
 export class FolderService {
   private apiUrl = 'http://localhost:3000/folders';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  private getUserId(): string {
+    return String(this.authService.getCurrentUser()?.id ?? '');
+  }
 
   getFolders(): Observable<Folder[]> {
-    return this.http.get<Folder[]>(this.apiUrl);
+    return this.http.get<Folder[]>(this.apiUrl).pipe(
+      map(folders => folders.filter(f => String(f.userId) === this.getUserId()))
+    );
   }
 
   folderChanged$ = new Subject<void>();
