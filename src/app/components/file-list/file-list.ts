@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FileService } from '../../services/file.service';
@@ -45,6 +45,7 @@ export class FileListComponent implements OnChanges, OnInit {
   previewFile: File | null = null;
 
   toast: { message: string; type: string } | null = null;
+  private toastTimeout: ReturnType<typeof setTimeout> | null = null;
 
   showConfirmModal = false;
   confirmMessage = '';
@@ -57,6 +58,7 @@ export class FileListComponent implements OnChanges, OnInit {
     private fileService: FileService,
     private folderService: FolderService,
     private authService: AuthService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -143,12 +145,16 @@ export class FileListComponent implements OnChanges, OnInit {
       modified: new Date().toISOString().split('T')[0],
       tags: [],
     };
+    this.showUploadModal = false;
+    this.newFileName = '';
+    this.allFiles = [...this.allFiles, file as unknown as File];
+    this.allExtensions = [...new Set(this.allFiles.map((f) => f.ext).filter(Boolean))];
+    this.applyFilters();
+    this.cdr.detectChanges();
+    this.showToast('File uploaded successfully!', 'success');
     this.fileService.uploadFile(file as unknown as File).subscribe({
       next: () => {
-        this.showUploadModal = false;
-        this.newFileName = '';
         this.loadAll();
-        this.showToast('File uploaded successfully!', 'success');
       },
     });
   }
@@ -209,6 +215,9 @@ export class FileListComponent implements OnChanges, OnInit {
 
   deleteFile(id: string | number): void {
     this.openConfirm('Are you sure you want to delete this file?', () => {
+      this.allFiles = this.allFiles.filter((f) => String(f.id) !== String(id));
+      this.applyFilters();
+      this.cdr.detectChanges();
       this.fileService.deleteFile(id).subscribe({
         next: () => {
           this.loadAll();
@@ -235,13 +244,16 @@ export class FileListComponent implements OnChanges, OnInit {
       `Are you sure you want to delete ${this.selectedItems.length} item(s)?`,
       () => {
         const ids = [...this.selectedItems];
+        this.allFiles = this.allFiles.filter((f) => !ids.includes(f.id));
+        this.selectedItems = [];
+        this.applyFilters();
+        this.cdr.detectChanges();
         let completed = 0;
         ids.forEach((id) => {
           this.fileService.deleteFile(id).subscribe({
             next: () => {
               completed++;
               if (completed === ids.length) {
-                this.selectedItems = [];
                 this.loadAll();
                 this.showToast('Items deleted.', 'warning');
               }
@@ -318,7 +330,12 @@ export class FileListComponent implements OnChanges, OnInit {
 
   showToast(message: string, type: string): void {
     this.toast = { message, type };
-    setTimeout(() => (this.toast = null), 3000);
+    this.cdr.detectChanges();
+    if (this.toastTimeout) clearTimeout(this.toastTimeout);
+    this.toastTimeout = setTimeout(() => {
+      this.toast = null;
+      this.cdr.detectChanges();
+    }, 5000);
   }
 
   navigateToFolder(id: string | number): void {

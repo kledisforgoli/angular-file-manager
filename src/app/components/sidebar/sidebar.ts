@@ -28,6 +28,9 @@ export class SidebarComponent implements OnInit {
   confirmMessage = '';
   confirmAction: (() => void) | null = null;
 
+  toast: { message: string; type: string } | null = null;
+  private toastTimeout: ReturnType<typeof setTimeout> | null = null;
+
   constructor(
     private folderService: FolderService,
     private authService: AuthService,
@@ -101,6 +104,7 @@ export class SidebarComponent implements OnInit {
         this.showNewFolderInput = false;
         this.folderSelected.emit(newId);
         this.loadFolders();
+        this.showToast('Folder created!', 'success');
       },
       error: () => {
         this.folders = this.folders.filter((f) => f.id !== newId);
@@ -123,10 +127,20 @@ export class SidebarComponent implements OnInit {
           if (String(this.selectedFolderId) === String(id)) {
             this.folderSelected.emit(0);
           }
+          this.showToast('Folder deleted.', 'warning');
         },
         error: () => this.loadFolders(), // rollback
       });
     });
+  }
+
+  showToast(message: string, type: string): void {
+    this.toast = { message, type };
+    if (this.toastTimeout) clearTimeout(this.toastTimeout);
+    this.toastTimeout = setTimeout(() => {
+      this.toast = null;
+      this.cdr.detectChanges();
+    }, 5000);
   }
 
   openConfirm(message: string, action: () => void): void {
