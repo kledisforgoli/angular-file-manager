@@ -244,21 +244,31 @@ export class FileListComponent implements OnChanges, OnInit {
       `Are you sure you want to delete ${this.selectedItems.length} item(s)?`,
       () => {
         const ids = [...this.selectedItems];
-        this.allFiles = this.allFiles.filter((f) => !ids.includes(f.id));
+        const fileIds = ids.filter((id) => this.allFiles.some((f) => f.id === id));
+        const folderIds = ids.filter((id) => this.folders.some((f) => f.id === id));
+
+        this.allFiles = this.allFiles.filter((f) => !fileIds.includes(f.id));
+        this.folders = this.folders.filter((f) => !folderIds.includes(f.id!));
         this.selectedItems = [];
+        this.subFolders = this.getSubFolders();
         this.applyFilters();
         this.cdr.detectChanges();
+
+        const total = fileIds.length + folderIds.length;
         let completed = 0;
-        ids.forEach((id) => {
-          this.fileService.deleteFile(id).subscribe({
-            next: () => {
-              completed++;
-              if (completed === ids.length) {
-                this.loadAll();
-                this.showToast('Items deleted.', 'warning');
-              }
-            },
-          });
+        const onComplete = () => {
+          completed++;
+          if (completed === total) {
+            this.loadAll();
+            this.showToast('Items deleted.', 'warning');
+          }
+        };
+
+        fileIds.forEach((id) => {
+          this.fileService.deleteFile(id).subscribe({ next: onComplete });
+        });
+        folderIds.forEach((id) => {
+          this.folderService.deleteFolder(id).subscribe({ next: onComplete });
         });
       },
     );
