@@ -54,6 +54,8 @@ export class FileListComponent implements OnChanges, OnInit {
   showBottomSheet = false;
   bottomSheetFile: File | null = null;
 
+  dragOverFolderId: string | number | null = null;
+
   constructor(
     private fileService: FileService,
     private folderService: FolderService,
@@ -346,6 +348,81 @@ export class FileListComponent implements OnChanges, OnInit {
       this.toast = null;
       this.cdr.detectChanges();
     }, 5000);
+  }
+
+  onDragStart(event: DragEvent, id: string | number, type: 'file' | 'folder'): void {
+    event.dataTransfer?.setData('application/json', JSON.stringify({ id: String(id), type }));
+    event.dataTransfer!.effectAllowed = 'move';
+  }
+
+  onDragOver(event: DragEvent, targetFolderId: string | number): void {
+    event.preventDefault();
+    event.dataTransfer!.dropEffect = 'move';
+    this.dragOverFolderId = targetFolderId;
+  }
+
+  onDragLeave(event: DragEvent, targetFolderId: string | number): void {
+    const el = event.currentTarget as HTMLElement;
+    if (!el.contains(event.relatedTarget as Node)) {
+      if (this.dragOverFolderId === targetFolderId) {
+        this.dragOverFolderId = null;
+      }
+    }
+  }
+
+  onDrop(event: DragEvent, targetFolderId: string | number): void {
+    event.preventDefault();
+    this.dragOverFolderId = null;
+
+    const raw = event.dataTransfer?.getData('application/json');
+    if (!raw) return;
+
+    const { id, type } = JSON.parse(raw) as { id: string; type: 'file' | 'folder' };
+
+    if (type === 'folder' && String(id) === String(targetFolderId)) return;
+
+    if (type === 'file') {
+      const file = this.allFiles.find((f) => String(f.id) === id);
+      if (!file) return;
+      const previousFolderId = file.folderId;
+      file.folderId = String(targetFolderId);
+      this.applyFilters();
+      this.cdr.detectChanges();
+
+      this.fileService.updateFile(id, { folderId: String(targetFolderId) }).subscribe({
+        next: () => this.showToast(`Moved "${file.name}" successfully.`, 'success'),
+        error: () => {
+          file.folderId = previousFolderId;
+          this.applyFilters();
+          this.cdr.detectChanges();
+          this.showToast('Failed to move file.', 'warning');
+        },
+      });
+    } else {
+      const folder = this.folders.find((f) => String(f.id) === id);
+      if (!folder) return;
+      const previousParentId = folder.parentId;
+      folder.parentId = String(targetFolderId);
+      this.subFolders = this.getSubFolders();
+      this.cdr.detectChanges();
+
+      this.folderService.updateFolder(id, { parentId: String(targetFolderId) }).subscribe({
+        next: () => {
+          this.folderService.folderChanged$.next();
+          this.showToast(`Moved "${folder.name}" successfully.`, 'success');
+        },
+        error: () => {
+          folder.parentId = previousParentId;
+          this.subFolders = this.getSubFolders();
+          this.cdr.detectChanges();
+          this.showToast('Failed to move folder.', 'warning');
+        },
+      });
+    }
+  }
+
+  onDragEnd(): void {
+    this.dragOverFolderId = null;
   }
 
   navigateToFolder(id: string | number): void {

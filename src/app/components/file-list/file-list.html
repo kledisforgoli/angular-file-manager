@@ -84,8 +84,16 @@
             <div class="col-6 col-sm-4 col-md-3 col-lg-2">
               <div
                 class="card border h-100"
+                [class.border-primary]="dragOverFolderId === folder.id"
+                [class.shadow]="dragOverFolderId === folder.id"
                 style="cursor: pointer"
-                 (click)="navigateToFolder(folder.id!)"
+                draggable="true"
+                (dragstart)="onDragStart($event, folder.id!, 'folder')"
+                (dragend)="onDragEnd()"
+                (dragover)="onDragOver($event, folder.id!)"
+                (dragleave)="onDragLeave($event, folder.id!)"
+                (drop)="onDrop($event, folder.id!)"
+                (click)="navigateToFolder(folder.id!)"
               >
                 <div class="card-body p-2 d-flex flex-column gap-1">
                   <div class="d-flex align-items-center justify-content-between">
@@ -187,7 +195,12 @@
             </thead>
             <tbody>
               @for (file of filteredFiles; track file.id) {
-                <tr [class.table-active]="selectedItems.includes(file.id!)">
+                <tr
+                  [class.table-active]="selectedItems.includes(file.id!)"
+                  draggable="true"
+                  (dragstart)="onDragStart($event, file.id!, 'file')"
+                  (dragend)="onDragEnd()"
+                >
                   <td>
                     <input
                       type="checkbox"
@@ -251,7 +264,13 @@
 
         <div class="d-md-none">
           @for (file of filteredFiles; track file.id) {
-            <div class="card mb-2" [class.border-primary]="selectedItems.includes(file.id!)">
+            <div
+              class="card mb-2"
+              [class.border-primary]="selectedItems.includes(file.id!)"
+              draggable="true"
+              (dragstart)="onDragStart($event, file.id!, 'file')"
+              (dragend)="onDragEnd()"
+            >
               <div class="card-body p-2">
                 <div class="d-flex align-items-center gap-2">
                   <input

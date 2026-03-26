@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FolderService } from '../../services/folder.service';
+import { FileService } from '../../services/file.service';
 import { Folder } from '../../models/folder.model';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
@@ -31,8 +32,11 @@ export class SidebarComponent implements OnInit {
   toast: { message: string; type: string } | null = null;
   private toastTimeout: ReturnType<typeof setTimeout> | null = null;
 
+  dragOverFolderId: string | number | null = null;
+
   constructor(
     private folderService: FolderService,
+    private fileService: FileService,
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
   ) {}
@@ -141,6 +145,75 @@ export class SidebarComponent implements OnInit {
       this.toast = null;
       this.cdr.detectChanges();
     }, 5000);
+  }
+
+  onDragStart(event: DragEvent, id: string | number): void {
+    event.dataTransfer?.setData('application/json', JSON.stringify({ id: String(id), type: 'folder' }));
+    event.dataTransfer!.effectAllowed = 'move';
+    event.stopPropagation();
+  }
+
+  onDragEnd(): void {
+    this.dragOverFolderId = null;
+  }
+
+  onDragOver(event: DragEvent, folderId: string | number): void {
+    event.preventDefault();
+    event.dataTransfer!.dropEffect = 'move';
+    this.dragOverFolderId = folderId;
+  }
+
+  onDragLeave(event: DragEvent, folderId: string | number): void {
+    const el = event.currentTarget as HTMLElement;
+    if (!el.contains(event.relatedTarget as Node)) {
+      if (this.dragOverFolderId === folderId) {
+        this.dragOverFolderId = null;
+      }
+    }
+  }
+
+  onDrop(event: DragEvent, targetFolderId: string | number): void {
+    event.preventDefault();
+    this.dragOverFolderId = null;
+
+    const raw = event.dataTransfer?.getData('application/json');
+    if (!raw) return;
+
+    const { id, type } = JSON.parse(raw) as { id: string; type: 'file' | 'folder' };
+
+    if (type === 'folder' && String(id) === String(targetFolderId)) return;
+
+    const actualParent = targetFolderId === 0 ? null : String(targetFolderId);
+
+    if (type === 'file') {
+      this.fileService.updateFile(id, { folderId: actualParent }).subscribe({
+        next: () => {
+          this.showToast('File moved!', 'success');
+          this.folderService.folderChanged$.next();
+        },
+        error: () => this.showToast('Failed to move file.', 'warning'),
+      });
+    } else {
+      const folder = this.folders.find((f) => String(f.id) === id);
+      if (!folder) return;
+      const previousParentId = folder.parentId;
+      folder.parentId = actualParent;
+      this.buildTree();
+      this.cdr.detectChanges();
+
+      this.folderService.updateFolder(id, { parentId: actualParent }).subscribe({
+        next: () => {
+          this.folderService.folderChanged$.next();
+          this.showToast('Folder moved!', 'success');
+        },
+        error: () => {
+          folder.parentId = previousParentId;
+          this.buildTree();
+          this.cdr.detectChanges();
+          this.showToast('Failed to move folder.', 'warning');
+        },
+      });
+    }
   }
 
   openConfirm(message: string, action: () => void): void {

@@ -9,3 +9,15 @@
     padding-bottom: 20px !important;
   }
 }
+
+[draggable="true"] {
+  user-select: none;
+}
+
+tr[draggable="true"]:active {
+  opacity: 0.5;
+}
+
+.card[draggable="true"]:active {
+  opacity: 0.5;
+}

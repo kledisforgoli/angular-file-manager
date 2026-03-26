@@ -37,8 +37,13 @@
     class="d-flex align-items-center gap-2 px-2 py-1 rounded mb-1"
     [class.bg-primary]="selectedFolderId == 0"
     [class.text-white]="selectedFolderId == 0"
+    [class.border]="dragOverFolderId === 0"
+    [class.border-primary]="dragOverFolderId === 0"
     style="cursor: pointer"
     (click)="selectFolder(0)"
+    (dragover)="onDragOver($event, 0)"
+    (dragleave)="onDragLeave($event, 0)"
+    (drop)="onDrop($event, 0)"
   >
     <i class="bi bi-hdd-fill text-primary"></i>
     <span class="small">My Drive</span>
@@ -49,8 +54,16 @@
     <div
       class="d-flex align-items-center justify-content-between px-2 py-1 rounded"
       [class.bg-primary]="isSelected(folder.id!)"
+      [class.border]="dragOverFolderId === folder.id"
+      [class.border-primary]="dragOverFolderId === folder.id"
       style="cursor: pointer"
+      draggable="true"
+      (dragstart)="onDragStart($event, folder.id!)"
+      (dragend)="onDragEnd()"
       (click)="selectFolder(folder.id!)"
+      (dragover)="onDragOver($event, folder.id!)"
+      (dragleave)="onDragLeave($event, folder.id!)"
+      (drop)="onDrop($event, folder.id!)"
     >
       <div class="d-flex align-items-center gap-2">
         <i class="bi bi-folder-fill text-warning"></i>
@@ -70,8 +83,16 @@
       *ngFor="let child of childMap[folder.id!] || []; trackBy: trackById"
       class="d-flex align-items-center justify-content-between px-2 py-1 rounded"
       [class.bg-primary]="isSelected(child.id!)"
+      [class.border]="dragOverFolderId === child.id"
+      [class.border-primary]="dragOverFolderId === child.id"
       style="cursor: pointer; padding-left: 28px !important"
+      draggable="true"
+      (dragstart)="onDragStart($event, child.id!)"
+      (dragend)="onDragEnd()"
       (click)="selectFolder(child.id!)"
+      (dragover)="onDragOver($event, child.id!)"
+      (dragleave)="onDragLeave($event, child.id!)"
+      (drop)="onDrop($event, child.id!)"
     >
       <div class="d-flex align-items-center gap-2">
         <i class="bi bi-folder-fill text-warning" style="font-size: 12px"></i>
