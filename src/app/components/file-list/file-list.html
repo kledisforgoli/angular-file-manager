@@ -45,6 +45,11 @@
 
 
     @if (selectedItems.length > 0) {
+      <button class="btn btn-sm btn-primary" (click)="openMoveModal()">
+        <i class="bi bi-folder-symlink me-1"></i>
+        <span class="d-none d-sm-inline">Move</span>
+        ({{ selectedItems.length }})
+      </button>
       <button class="btn btn-sm btn-danger" (click)="deleteSelected()">
         <i class="bi bi-trash3 me-1"></i>
         <span class="d-none d-sm-inline">Delete</span>
@@ -553,6 +558,55 @@
       <button class="btn btn-secondary w-100 btn-sm" (click)="showBottomSheet = false">
         Cancel
       </button>
+    </div>
+  </div>
+}
+
+@if (showMoveModal) {
+  <div class="modal d-block" style="background: rgba(0, 0, 0, 0.5)">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title">
+            <i class="bi bi-folder-symlink me-2"></i>Move {{ selectedItems.length }} item(s)
+          </h6>
+          <button class="btn-close" (click)="showMoveModal = false"></button>
+        </div>
+        <div class="modal-body" style="max-height: 360px; overflow-y: auto">
+          <div
+            class="d-flex align-items-center gap-2 px-2 py-2 rounded mb-1"
+            [class.bg-primary]="moveTargetId === 0"
+            [class.text-white]="moveTargetId === 0"
+            style="cursor: pointer"
+            (click)="moveTargetId = 0"
+          >
+            <i class="bi bi-hdd-fill text-primary"></i>
+            <span class="small fw-semibold">My Drive (root)</span>
+          </div>
+          @for (folder of moveFolderList; track folder.id) {
+            <div
+              class="d-flex align-items-center gap-2 px-2 py-2 rounded mb-1"
+              [class.bg-primary]="moveTargetId === folder.id"
+              [class.text-white]="moveTargetId === folder.id"
+              style="cursor: pointer"
+              [style.padding-left]="folder.parentId ? '28px' : '12px'"
+              (click)="moveTargetId = folder.id!"
+            >
+              <i class="bi bi-folder-fill text-warning"></i>
+              <span class="small">{{ folder.name }}</span>
+            </div>
+          }
+          @if (moveFolderList.length === 0) {
+            <p class="text-muted small text-center mt-2">No folders available.</p>
+          }
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" (click)="showMoveModal = false">Cancel</button>
+          <button class="btn btn-primary btn-sm" (click)="moveSelected()" [disabled]="moveTargetId === null">
+            <i class="bi bi-folder-symlink me-1"></i>Move here
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 }

@@ -21,3 +21,9 @@ tr[draggable="true"]:active {
 .card[draggable="true"]:active {
   opacity: 0.5;
 }
+
+.card.border-primary.shadow {
+  border-width: 2px !important;
+  transform: scale(1.03);
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}

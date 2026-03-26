@@ -56,6 +56,10 @@ export class FileListComponent implements OnChanges, OnInit {
 
   dragOverFolderId: string | number | null = null;
 
+  showMoveModal = false;
+  moveTargetId: string | number | null = null;
+  moveFolderList: Folder[] = [];
+
   constructor(
     private fileService: FileService,
     private folderService: FolderService,
@@ -350,8 +354,72 @@ export class FileListComponent implements OnChanges, OnInit {
     }, 5000);
   }
 
+  openMoveModal(): void {
+    if (!this.selectedItems.length) return;
+    const selectedSet = new Set(this.selectedItems.map(String));
+    this.moveFolderList = this.folders.filter((f) => !selectedSet.has(String(f.id)));
+    this.moveTargetId = null;
+    this.showMoveModal = true;
+  }
+
+  moveSelected(): void {
+    if (this.moveTargetId === null || !this.selectedItems.length) return;
+
+    const targetFolderId = this.moveTargetId;
+    const actualParent = targetFolderId === 0 ? null : String(targetFolderId);
+
+    const ids = [...this.selectedItems];
+    const fileIds = ids.filter((id) => this.allFiles.some((f) => f.id === id));
+    const folderIds = ids.filter((id) => this.folders.some((f) => f.id === id));
+
+    for (const fid of fileIds) {
+      const file = this.allFiles.find((f) => f.id === fid);
+      if (file) file.folderId = actualParent;
+    }
+    for (const fid of folderIds) {
+      const folder = this.folders.find((f) => f.id === fid);
+      if (folder) folder.parentId = actualParent;
+    }
+
+    this.showMoveModal = false;
+    this.selectedItems = [];
+    this.subFolders = this.getSubFolders();
+    this.applyFilters();
+    this.cdr.detectChanges();
+
+    const total = ids.length;
+    let completed = 0;
+
+    const onComplete = () => {
+      completed++;
+      if (completed === total) {
+        if (folderIds.length) this.folderService.folderChanged$.next();
+        this.loadAll();
+        this.showToast(`Moved ${total} item(s) successfully.`, 'success');
+      }
+    };
+
+    for (const fid of fileIds) {
+      this.fileService.updateFile(fid, { folderId: actualParent }).subscribe({ next: onComplete });
+    }
+    for (const fid of folderIds) {
+      this.folderService.updateFolder(fid, { parentId: actualParent }).subscribe({ next: onComplete });
+    }
+  }
+
   onDragStart(event: DragEvent, id: string | number, type: 'file' | 'folder'): void {
-    event.dataTransfer?.setData('application/json', JSON.stringify({ id: String(id), type }));
+    let items: { id: string; type: 'file' | 'folder' }[];
+
+    if (this.selectedItems.includes(id) && this.selectedItems.length > 1) {
+      items = this.selectedItems.map((sid) => {
+        const isFile = this.allFiles.some((f) => f.id === sid);
+        return { id: String(sid), type: (isFile ? 'file' : 'folder') as 'file' | 'folder' };
+      });
+    } else {
+      items = [{ id: String(id), type }];
+    }
+
+    event.dataTransfer?.setData('application/json', JSON.stringify({ items }));
     event.dataTransfer!.effectAllowed = 'move';
   }
 
@@ -377,46 +445,73 @@ export class FileListComponent implements OnChanges, OnInit {
     const raw = event.dataTransfer?.getData('application/json');
     if (!raw) return;
 
-    const { id, type } = JSON.parse(raw) as { id: string; type: 'file' | 'folder' };
+    const payload = JSON.parse(raw);
+    const items: { id: string; type: 'file' | 'folder' }[] = payload.items
+      ?? [{ id: payload.id, type: payload.type }];
 
-    if (type === 'folder' && String(id) === String(targetFolderId)) return;
+    const validItems = items.filter(
+      (item) => !(item.type === 'folder' && String(item.id) === String(targetFolderId)),
+    );
+    if (!validItems.length) return;
 
-    if (type === 'file') {
-      const file = this.allFiles.find((f) => String(f.id) === id);
-      if (!file) return;
-      const previousFolderId = file.folderId;
+    const fileItems = validItems.filter((i) => i.type === 'file');
+    const folderItems = validItems.filter((i) => i.type === 'folder');
+
+    const rollbacks: (() => void)[] = [];
+
+    for (const fi of fileItems) {
+      const file = this.allFiles.find((f) => String(f.id) === fi.id);
+      if (!file) continue;
+      const prev = file.folderId;
       file.folderId = String(targetFolderId);
-      this.applyFilters();
-      this.cdr.detectChanges();
+      rollbacks.push(() => { file.folderId = prev; });
+    }
 
-      this.fileService.updateFile(id, { folderId: String(targetFolderId) }).subscribe({
-        next: () => this.showToast(`Moved "${file.name}" successfully.`, 'success'),
-        error: () => {
-          file.folderId = previousFolderId;
+    for (const fi of folderItems) {
+      const folder = this.folders.find((f) => String(f.id) === fi.id);
+      if (!folder) continue;
+      const prev = folder.parentId;
+      folder.parentId = String(targetFolderId);
+      rollbacks.push(() => { folder.parentId = prev; });
+    }
+
+    this.selectedItems = [];
+    this.subFolders = this.getSubFolders();
+    this.applyFilters();
+    this.cdr.detectChanges();
+
+    let completed = 0;
+    const total = validItems.length;
+    let hasError = false;
+
+    const onComplete = (err: boolean) => {
+      if (err) hasError = true;
+      completed++;
+      if (completed === total) {
+        if (hasError) {
+          rollbacks.forEach((rb) => rb());
+          this.subFolders = this.getSubFolders();
           this.applyFilters();
           this.cdr.detectChanges();
-          this.showToast('Failed to move file.', 'warning');
-        },
-      });
-    } else {
-      const folder = this.folders.find((f) => String(f.id) === id);
-      if (!folder) return;
-      const previousParentId = folder.parentId;
-      folder.parentId = String(targetFolderId);
-      this.subFolders = this.getSubFolders();
-      this.cdr.detectChanges();
+          this.showToast('Failed to move some items.', 'warning');
+        } else {
+          this.showToast(`Moved ${total} item(s) successfully.`, 'success');
+        }
+        if (folderItems.length) this.folderService.folderChanged$.next();
+        this.loadAll();
+      }
+    };
 
-      this.folderService.updateFolder(id, { parentId: String(targetFolderId) }).subscribe({
-        next: () => {
-          this.folderService.folderChanged$.next();
-          this.showToast(`Moved "${folder.name}" successfully.`, 'success');
-        },
-        error: () => {
-          folder.parentId = previousParentId;
-          this.subFolders = this.getSubFolders();
-          this.cdr.detectChanges();
-          this.showToast('Failed to move folder.', 'warning');
-        },
+    for (const fi of fileItems) {
+      this.fileService.updateFile(fi.id, { folderId: String(targetFolderId) }).subscribe({
+        next: () => onComplete(false),
+        error: () => onComplete(true),
+      });
+    }
+    for (const fi of folderItems) {
+      this.folderService.updateFolder(fi.id, { parentId: String(targetFolderId) }).subscribe({
+        next: () => onComplete(false),
+        error: () => onComplete(true),
       });
     }
   }

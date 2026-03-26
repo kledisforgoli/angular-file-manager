@@ -148,7 +148,7 @@ export class SidebarComponent implements OnInit {
   }
 
   onDragStart(event: DragEvent, id: string | number): void {
-    event.dataTransfer?.setData('application/json', JSON.stringify({ id: String(id), type: 'folder' }));
+    event.dataTransfer?.setData('application/json', JSON.stringify({ items: [{ id: String(id), type: 'folder' }] }));
     event.dataTransfer!.effectAllowed = 'move';
     event.stopPropagation();
   }
@@ -179,39 +179,63 @@ export class SidebarComponent implements OnInit {
     const raw = event.dataTransfer?.getData('application/json');
     if (!raw) return;
 
-    const { id, type } = JSON.parse(raw) as { id: string; type: 'file' | 'folder' };
-
-    if (type === 'folder' && String(id) === String(targetFolderId)) return;
+    const payload = JSON.parse(raw);
+    const items: { id: string; type: 'file' | 'folder' }[] = payload.items
+      ?? [{ id: payload.id, type: payload.type }];
 
     const actualParent = targetFolderId === 0 ? null : String(targetFolderId);
 
-    if (type === 'file') {
-      this.fileService.updateFile(id, { folderId: actualParent }).subscribe({
-        next: () => {
-          this.showToast('File moved!', 'success');
-          this.folderService.folderChanged$.next();
-        },
-        error: () => this.showToast('Failed to move file.', 'warning'),
-      });
-    } else {
-      const folder = this.folders.find((f) => String(f.id) === id);
-      if (!folder) return;
-      const previousParentId = folder.parentId;
+    const validItems = items.filter(
+      (item) => !(item.type === 'folder' && String(item.id) === String(targetFolderId)),
+    );
+    if (!validItems.length) return;
+
+    const fileItems = validItems.filter((i) => i.type === 'file');
+    const folderItems = validItems.filter((i) => i.type === 'folder');
+
+    const rollbacks: (() => void)[] = [];
+    for (const fi of folderItems) {
+      const folder = this.folders.find((f) => String(f.id) === fi.id);
+      if (!folder) continue;
+      const prev = folder.parentId;
       folder.parentId = actualParent;
+      rollbacks.push(() => { folder.parentId = prev; });
+    }
+    if (folderItems.length) {
       this.buildTree();
       this.cdr.detectChanges();
+    }
 
-      this.folderService.updateFolder(id, { parentId: actualParent }).subscribe({
-        next: () => {
-          this.folderService.folderChanged$.next();
-          this.showToast('Folder moved!', 'success');
-        },
-        error: () => {
-          folder.parentId = previousParentId;
+    let completed = 0;
+    const total = validItems.length;
+    let hasError = false;
+
+    const onComplete = (err: boolean) => {
+      if (err) hasError = true;
+      completed++;
+      if (completed === total) {
+        if (hasError) {
+          rollbacks.forEach((rb) => rb());
           this.buildTree();
           this.cdr.detectChanges();
-          this.showToast('Failed to move folder.', 'warning');
-        },
+          this.showToast('Failed to move some items.', 'warning');
+        } else {
+          this.showToast(`Moved ${total} item(s)!`, 'success');
+        }
+        this.folderService.folderChanged$.next();
+      }
+    };
+
+    for (const fi of fileItems) {
+      this.fileService.updateFile(fi.id, { folderId: actualParent }).subscribe({
+        next: () => onComplete(false),
+        error: () => onComplete(true),
+      });
+    }
+    for (const fi of folderItems) {
+      this.folderService.updateFolder(fi.id, { parentId: actualParent }).subscribe({
+        next: () => onComplete(false),
+        error: () => onComplete(true),
       });
     }
   }
