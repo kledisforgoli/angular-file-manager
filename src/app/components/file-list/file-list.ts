@@ -96,15 +96,23 @@ export class FileListComponent implements OnChanges, OnInit {
   }
 
   applyFilters(): void {
-    let result = this.allFiles.filter((f) => {
-      if (this.selectedFolderId == 0) {
-        return f.folderId === null || f.folderId === undefined;
-      }
-      return String(f.folderId) === String(this.selectedFolderId);
-    });
+    let result: File[];
 
-    if (this.searchQuery) {
-      result = result.filter((f) => f.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+    if (this.searchQuery && this.selectedFolderId == 0) {
+      result = this.allFiles.filter((f) =>
+        f.name.toLowerCase().includes(this.searchQuery.toLowerCase()),
+      );
+    } else {
+      result = this.allFiles.filter((f) => {
+        if (this.selectedFolderId == 0) {
+          return f.folderId === null || f.folderId === undefined;
+        }
+        return String(f.folderId) === String(this.selectedFolderId);
+      });
+
+      if (this.searchQuery) {
+        result = result.filter((f) => f.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+      }
     }
 
     if (this.filterExt) {

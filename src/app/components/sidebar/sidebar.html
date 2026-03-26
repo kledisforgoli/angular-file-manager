@@ -45,7 +45,7 @@
     (dragleave)="onDragLeave($event, 0)"
     (drop)="onDrop($event, 0)"
   >
-    <i class="bi bi-hdd-fill text-primary"></i>
+    <i class="bi bi-hdd-fill" [class.text-primary]="selectedFolderId != 0" [class.text-white]="selectedFolderId == 0"></i>
     <span class="small">My Drive</span>
   </div>
 

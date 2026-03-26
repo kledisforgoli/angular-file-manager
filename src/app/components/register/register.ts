@@ -78,12 +78,7 @@ export class RegisterComponent {
     this.authService.register(this.name.trim(), this.username, this.password).subscribe({
       next: () => {
         this.loading = false;
-        this.authService.logout();
-        this.successMessage = 'Account created successfully! Redirecting to login...';
-        this.cdr.detectChanges();
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 2000);
+        this.router.navigate(['/'], { replaceUrl: true });
       },
       error: (err) => {
         this.loading = false;

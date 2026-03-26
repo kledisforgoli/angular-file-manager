@@ -1,27 +1,9 @@
 {
   "folders": [
     {
-      "id": "1",
-      "name": "Projects",
-      "parentId": null,
-      "userId": "1"
-    },
-    {
-      "id": "2",
-      "name": "Assets",
-      "parentId": null,
-      "userId": "1"
-    },
-    {
       "id": "3",
       "name": "Alpha",
       "parentId": "1",
-      "userId": "1"
-    },
-    {
-      "id": "4",
-      "name": "folder1",
-      "parentId": null,
       "userId": "1"
     },
     {
@@ -91,12 +73,6 @@
       "userId": "1"
     },
     {
-      "id": "1773154485836",
-      "name": "kledi",
-      "parentId": null,
-      "userId": "1"
-    },
-    {
       "id": "1773154599513",
       "name": "klledi koqja",
       "parentId": "1773154594720",
@@ -109,27 +85,9 @@
       "userId": "1"
     },
     {
-      "id": "1773159054588",
-      "name": "test",
-      "parentId": null,
-      "userId": "1"
-    },
-    {
       "id": "cmmkte0oi00013b6od9m8l425",
       "name": "test 3",
       "parentId": "1773159059033",
-      "userId": "1"
-    },
-    {
-      "id": "1773159980226",
-      "name": "kledis forgoli",
-      "parentId": null,
-      "userId": "1"
-    },
-    {
-      "id": "1773392025961",
-      "name": "shembull",
-      "parentId": null,
       "userId": "1"
     },
     {
@@ -137,12 +95,6 @@
       "name": "kledis",
       "parentId": null,
       "userId": "2"
-    },
-    {
-      "id": "1774352409990",
-      "name": "asdwad",
-      "parentId": null,
-      "userId": "1"
     },
     {
       "id": "cmn4ju3t900003b6qpi9nhczn",
@@ -167,12 +119,6 @@
       "name": "kledis",
       "parentId": null,
       "userId": "1773218175237"
-    },
-    {
-      "id": "1774374539693",
-      "name": "TEST1",
-      "parentId": null,
-      "userId": "1"
     },
     {
       "id": "1774374557829",
@@ -215,143 +161,31 @@
       "name": "DULLLAAA",
       "parentId": null,
       "userId": "1774377898419"
+    },
+    {
+      "id": "cmn7ayoz600003b6q3ewm0gg1",
+      "name": "folder kledi",
+      "parentId": "1774354510807",
+      "userId": "1773218175237"
+    },
+    {
+      "id": "cmn7ayxy200013b6qb2liu9bg",
+      "name": "foto kledi",
+      "parentId": "1774354510807",
+      "userId": "1773218175237"
+    },
+    {
+      "id": "1774519586889",
+      "name": "This PC",
+      "parentId": null,
+      "userId": "1"
     }
   ],
   "files": [
     {
-      "id": "1",
-      "name": "design_v1.fig",
-      "folderId": "3",
-      "userId": "1",
-      "size": 2400000,
-      "ext": "fig",
-      "modified": "2025-03-01",
-      "tags": []
-    },
-    {
-      "id": "2",
-      "name": "hero.png",
-      "folderId": "3",
-      "userId": "1",
-      "size": 840000,
-      "ext": "png",
-      "modified": "2025-03-02",
-      "tags": []
-    },
-    {
-      "id": "4",
-      "name": "document.pdf",
-      "folderId": "4",
-      "userId": "1",
-      "size": 430443,
-      "ext": "pdf",
-      "modified": "2026-03-09",
-      "tags": []
-    },
-    {
-      "id": "1773150086964",
-      "name": "fewlk fwe f",
-      "folderId": null,
-      "userId": "1",
-      "size": 746237,
-      "ext": "fewlk fwe f",
-      "modified": "2026-03-10",
-      "tags": []
-    },
-    {
-      "id": "1773151425049",
-      "name": "kot.pdf",
-      "folderId": null,
-      "userId": "1",
-      "size": 727691,
-      "ext": "pdf",
-      "modified": "2026-03-10",
-      "tags": []
-    },
-    {
-      "id": "cmmkorcxq00013b6o9hu7n8sg",
-      "name": "dasddhd",
-      "folderId": null,
-      "userId": "1",
-      "size": 660415,
-      "ext": "dasddhd",
-      "modified": "2026-03-10",
-      "tags": []
-    },
-    {
-      "id": "cmmkpcshm00003b6ogkuzvg0q",
-      "name": "jjjj",
-      "folderId": null,
-      "userId": "1",
-      "size": 342776,
-      "ext": "jjjj",
-      "modified": "2026-03-10",
-      "tags": []
-    },
-    {
-      "id": "cmmkrnb0k00003b6o8leyauvd",
-      "name": "cs2.pdf",
-      "folderId": null,
-      "userId": "1",
-      "size": 156716,
-      "ext": "pdf",
-      "modified": "2026-03-10",
-      "tags": []
-    },
-    {
-      "id": "cmmkrns7400013b6o1weygmxd",
-      "name": "cs2.img",
-      "folderId": null,
-      "userId": "1",
-      "size": 659793,
-      "ext": "img",
-      "modified": "2026-03-10",
-      "tags": []
-    },
-    {
-      "id": "cmmktdlgv00003b6oeectt6en",
-      "name": "kledis",
-      "folderId": null,
-      "userId": "1",
-      "size": 838058,
-      "ext": "kledis",
-      "modified": "2026-03-10",
-      "tags": []
-    },
-    {
-      "id": "cmmktv81k00013b6om2l2liaa",
-      "name": "foto",
-      "folderId": "1773159980226",
-      "userId": "1",
-      "size": 502501,
-      "ext": "foto",
-      "modified": "2026-03-10",
-      "tags": []
-    },
-    {
-      "id": "cmmktvflj00023b6oawnphs82",
-      "name": "video",
-      "folderId": "1773159980226",
-      "userId": "1",
-      "size": 611785,
-      "ext": "video",
-      "modified": "2026-03-10",
-      "tags": []
-    },
-    {
-      "id": "cmmm5s3u500003b6q7kv4qjqs",
-      "name": "klediii.pdf",
-      "folderId": "1773154485836",
-      "userId": "1",
-      "size": 813441,
-      "ext": "pdf",
-      "modified": "2026-03-11",
-      "tags": []
-    },
-    {
       "id": "cmn4kvld600003b6qtaohhboe",
       "name": "kledis.pdf",
-      "folderId": "1774354510807",
+      "folderId": "1774515132561",
       "userId": "1773218175237",
       "size": 853380,
       "ext": "pdf",
@@ -371,7 +205,7 @@
     {
       "id": "cmn4yfbya00003b6q5a1svja5",
       "name": "fora",
-      "folderId": "1774354510807",
+      "folderId": "1774515132561",
       "userId": "1773218175237",
       "size": 516573,
       "ext": "fora",
@@ -473,13 +307,6 @@
       "role": "user"
     },
     {
-      "id": "1773232620195",
-      "name": "kleo",
-      "username": "kleo",
-      "password": "kleo123",
-      "role": "user"
-    },
-    {
       "id": "1773233623320",
       "name": "www",
       "username": "www",
@@ -498,6 +325,20 @@
       "name": "Nojzi",
       "username": "nojzi",
       "password": "Nojzi1111",
+      "role": "user"
+    },
+    {
+      "id": "1774519339543",
+      "name": "goku",
+      "username": "goku",
+      "password": "Goku1111",
+      "role": "user"
+    },
+    {
+      "id": "1774519460259",
+      "name": "vexhita",
+      "username": "vexhita",
+      "password": "Vexhita1111",
       "role": "user"
     }
   ],
