@@ -347,26 +347,35 @@
       <div class="modal-content">
         <div class="modal-header">
           <h6 class="modal-title">Upload File</h6>
-          <button class="btn-close" (click)="showUploadModal = false"></button>
+          <button class="btn-close" (click)="showUploadModal = false; newFileName = ''"></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3 rounded p-4 text-center text-muted" style="border: 2px dashed var(--drop-zone-border, #dee2e6)">
-            <i class="bi bi-cloud-upload fs-2"></i>
-            <p class="small mt-2">Drag & drop (simulated)</p>
+          <div
+            class="rounded p-4 text-center text-muted"
+            style="border: 2px dashed var(--drop-zone-border, #dee2e6); cursor: pointer"
+            (click)="fileInput.click()"
+          >
+            <i class="bi bi-cloud-arrow-up fs-1"></i>
+            <p class="small mt-2 mb-0">Click to choose a file</p>
           </div>
-          <label class="form-label small fw-semibold">File Name</label>
           <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="newFileName"
-            placeholder="document.pdf"
-            (keydown.enter)="uploadFile()"
-            autofocus
+            #fileInput
+            type="file"
+            class="d-none"
+            (change)="onFileSelected($event)"
           />
+          @if (newFileName) {
+            <div class="mt-3 d-flex align-items-center gap-2 small border rounded px-3 py-2">
+              <i class="bi bi-file-earmark text-primary"></i>
+              <span class="text-truncate fw-semibold">{{ newFileName }}</span>
+            </div>
+          }
         </div>
         <div class="modal-footer">
-          <button class="btn btn-secondary btn-sm" (click)="showUploadModal = false">Cancel</button>
-          <button class="btn btn-primary btn-sm" (click)="uploadFile()">Upload</button>
+          <button class="btn btn-secondary btn-sm" (click)="showUploadModal = false; newFileName = ''">Cancel</button>
+          <button class="btn btn-primary btn-sm" (click)="uploadFile()" [disabled]="!newFileName">
+            <i class="bi bi-upload me-1"></i>Upload
+          </button>
         </div>
       </div>
     </div>

@@ -146,6 +146,19 @@ export class FileListComponent implements OnChanges, OnInit {
     return this.folders.filter((f) => String(f.parentId) === String(this.selectedFolderId));
   }
 
+  private selectedFileSize = 0;
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const selected = input.files[0];
+      this.newFileName = selected.name;
+      this.selectedFileSize = selected.size;
+      this.cdr.detectChanges();
+      input.value = '';
+    }
+  }
+
   uploadFile(): void {
     if (!this.newFileName.trim()) return;
     const ext = this.newFileName.split('.').pop()?.toLowerCase() || '';
@@ -154,13 +167,14 @@ export class FileListComponent implements OnChanges, OnInit {
       name: this.newFileName.trim(),
       folderId: this.selectedFolderId == 0 ? null : String(this.selectedFolderId),
       userId: String(this.authService.getCurrentUser()?.id ?? ''),
-      size: Math.floor(Math.random() * 900000 + 1000),
+      size: this.selectedFileSize || Math.floor(Math.random() * 900000 + 1000),
       ext,
       modified: new Date().toISOString().split('T')[0],
       tags: [],
     };
     this.showUploadModal = false;
     this.newFileName = '';
+    this.selectedFileSize = 0;
     this.allFiles = [...this.allFiles, file as unknown as File];
     this.allExtensions = [...new Set(this.allFiles.map((f) => f.ext).filter(Boolean))];
     this.applyFilters();
