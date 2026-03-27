@@ -28,6 +28,7 @@ export class AdminComponent implements OnInit {
   private toastTimeout: ReturnType<typeof setTimeout> | null = null;
 
   currentUserId: string | number = '';
+  currentUserName = '';
 
   constructor(
     private authService: AuthService,
@@ -37,7 +38,9 @@ export class AdminComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.currentUserId = this.authService.getCurrentUser()?.id ?? '';
+    const currentUser = this.authService.getCurrentUser();
+    this.currentUserId = currentUser?.id ?? '';
+    this.currentUserName = currentUser?.name ?? '';
     this.loadUsers();
   }
 
@@ -123,10 +126,6 @@ export class AdminComponent implements OnInit {
 
   isCurrentUser(user: User): boolean {
     return String(user.id) === String(this.currentUserId);
-  }
-
-  goBack(): void {
-    this.router.navigate(['/']);
   }
 
   onLogout(): void {

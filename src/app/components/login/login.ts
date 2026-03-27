@@ -48,7 +48,8 @@ export class LoginComponent {
       next: (user) => {
         this.loading = false;
         if (user) {
-          this.router.navigate(['/'], { replaceUrl: true });
+          const target = user.role === 'admin' ? '/admin' : '/';
+          this.router.navigate([target], { replaceUrl: true });
         } else {
           this.errorField = 'both';
           this.errorMessage = 'Invalid username or password.';

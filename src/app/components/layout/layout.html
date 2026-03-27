@@ -30,13 +30,6 @@
         {{ currentUser?.role | uppercase }}
       </span>
 
-      @if (isAdmin) {
-        <button class="btn btn-sm btn-outline-danger" (click)="goToAdmin()" title="Admin Panel">
-          <i class="bi bi-shield-lock"></i>
-          <span class="d-none d-sm-inline ms-1">Admin</span>
-        </button>
-      }
-
       <button
         class="btn btn-sm btn-outline-secondary"
         (click)="themeService.toggleTheme()"

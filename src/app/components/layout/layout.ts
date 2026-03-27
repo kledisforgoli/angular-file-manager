@@ -38,14 +38,6 @@ export class LayoutComponent implements OnInit {
     this.sidebarOpen = !this.isMobile;
   }
 
-  get isAdmin(): boolean {
-    return this.authService.isAdmin();
-  }
-
-  goToAdmin(): void {
-    this.router.navigate(['/admin']);
-  }
-
   onLogout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

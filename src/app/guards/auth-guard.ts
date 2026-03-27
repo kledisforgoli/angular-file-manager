@@ -6,12 +6,17 @@ export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isLoggedIn()) {
-    return true;
+  if (!authService.isLoggedIn()) {
+    router.navigate(['/login']);
+    return false;
   }
 
-  router.navigate(['/login']);
-  return false;
+  if (authService.isAdmin()) {
+    router.navigate(['/admin'], { replaceUrl: true });
+    return false;
+  }
+
+  return true;
 };
 
 export const guestGuard: CanActivateFn = () => {
@@ -22,7 +27,8 @@ export const guestGuard: CanActivateFn = () => {
     return true;
   }
 
-  router.navigate(['/'], { replaceUrl: true });
+  const target = authService.isAdmin() ? '/admin' : '/';
+  router.navigate([target], { replaceUrl: true });
   return false;
 };
 
