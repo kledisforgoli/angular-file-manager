@@ -379,7 +379,23 @@ export class FileListComponent implements OnChanges, OnInit {
   openMoveModal(): void {
     if (!this.selectedItems.length) return;
     const selectedSet = new Set(this.selectedItems.map(String));
-    this.moveFolderList = this.folders.filter((f) => !selectedSet.has(String(f.id)));
+    const folderIdSet = new Set(this.folders.map((f) => String(f.id)));
+    const reachable = this.folders.filter((f) => {
+      if (selectedSet.has(String(f.id))) return false;
+      let current = f;
+      const visited = new Set<string>();
+      while (current.parentId != null) {
+        const pid = String(current.parentId);
+        if (visited.has(pid)) return false;
+        visited.add(pid);
+        if (!folderIdSet.has(pid)) return false;
+        const parent = this.folders.find((p) => String(p.id) === pid);
+        if (!parent) return false;
+        current = parent;
+      }
+      return true;
+    });
+    this.moveFolderList = reachable;
     this.moveTargetId = null;
     this.showMoveModal = true;
   }
