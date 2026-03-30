@@ -1,16 +1,118 @@
 {
   "folders": [
     {
+      "id": "3",
+      "name": "Alpha",
+      "parentId": "1",
+      "userId": "1"
+    },
+    {
+      "id": "1773149928062",
+      "name": "eraldo",
+      "parentId": "0",
+      "userId": "1"
+    },
+    {
+      "id": "1773150095387",
+      "name": "efv erv kre v",
+      "parentId": "0",
+      "userId": "1"
+    },
+    {
+      "id": "1773150129639",
+      "name": "efwfewf",
+      "parentId": "0",
+      "userId": "1"
+    },
+    {
+      "id": "1773150723687",
+      "name": "ffff",
+      "parentId": "0",
+      "userId": "1"
+    },
+    {
+      "id": "1773151078474",
+      "name": "bgvtygtygyt",
+      "parentId": "0",
+      "userId": "1"
+    },
+    {
+      "id": "1773151096125",
+      "name": "top",
+      "parentId": "0",
+      "userId": "1"
+    },
+    {
+      "id": "1773151446564",
+      "name": "uidqwhuiduwqidb",
+      "parentId": "1773151403865",
+      "userId": "1"
+    },
+    {
+      "id": "1773151520567",
+      "name": "e reeee",
+      "parentId": "0",
+      "userId": "1"
+    },
+    {
+      "id": "1773152738479",
+      "name": "ddsv",
+      "parentId": "cmmkor4l000003b6om2iyp6lq",
+      "userId": "1"
+    },
+    {
+      "id": "1773153570454",
+      "name": "kledi 2",
+      "parentId": "1773153564460",
+      "userId": "1"
+    },
+    {
+      "id": "1773153737174",
+      "name": "klledi",
+      "parentId": "1773153717369",
+      "userId": "1"
+    },
+    {
+      "id": "1773154599513",
+      "name": "klledi koqja",
+      "parentId": "1773154594720",
+      "userId": "1"
+    },
+    {
+      "id": "1773156556596",
+      "name": "cs2",
+      "parentId": "1773154599513",
+      "userId": "1"
+    },
+    {
+      "id": "cmmkte0oi00013b6od9m8l425",
+      "name": "test 3",
+      "parentId": "1773159059033",
+      "userId": "1"
+    },
+    {
       "id": "cmn4jhobd00003b6qk9btl9cw",
       "name": "kledis",
       "parentId": null,
       "userId": "2"
     },
     {
+      "id": "cmn4ju3t900003b6qpi9nhczn",
+      "name": "eljaaa",
+      "parentId": "1774352778865",
+      "userId": "1773218175237"
+    },
+    {
       "id": "1774352842501",
       "name": "adhisifhas",
       "parentId": null,
       "userId": "1773222707346"
+    },
+    {
+      "id": "1774354068610",
+      "name": "dasdoaw",
+      "parentId": null,
+      "userId": null
     },
     {
       "id": "1774354510807",
@@ -31,14 +133,8 @@
       "userId": "1773218175237"
     },
     {
-      "id": "1774375417992",
-      "name": "fnlsfilwief",
-      "parentId": null,
-      "userId": "1773218175237"
-    },
-    {
       "id": "1774375753205",
-      "name": "hahahahahah",
+      "name": "hahahahahahfaffa",
       "parentId": null,
       "userId": "1773218175237"
     },
@@ -73,6 +169,12 @@
       "userId": "1773218175237"
     },
     {
+      "id": "1774519586889",
+      "name": "This PC",
+      "parentId": null,
+      "userId": "1"
+    },
+    {
       "id": "cmn7exwon00053b6qxtfxylrc",
       "name": "nsdhiw",
       "parentId": "cmn7ayxy200013b6qb2liu9bg",
@@ -89,6 +191,48 @@
       "name": "hltv2",
       "parentId": "1774600076985",
       "userId": "2"
+    },
+    {
+      "id": "1774879029890",
+      "name": "folderiii",
+      "parentId": null,
+      "userId": "1773218175237"
+    },
+    {
+      "id": "1774901623017",
+      "name": "folder 1",
+      "parentId": null,
+      "userId": "1774901563822"
+    },
+    {
+      "id": "cmndmmemv00013b6q7hof5n8k",
+      "name": "subfolder",
+      "parentId": "1774901792584",
+      "userId": "1774901563822"
+    },
+    {
+      "id": "1774901792584",
+      "name": "folder 2",
+      "parentId": null,
+      "userId": "1774901563822"
+    },
+    {
+      "id": "1774901820850",
+      "name": "subfolder 2",
+      "parentId": "1774901792584",
+      "userId": "1774901563822"
+    },
+    {
+      "id": "1774901826680",
+      "name": "subfolder 3",
+      "parentId": "1774901792584",
+      "userId": "1774901563822"
+    },
+    {
+      "id": "1774901884207",
+      "name": "kledi",
+      "parentId": null,
+      "userId": "1774901563822"
     }
   ],
   "files": [
@@ -143,16 +287,6 @@
       "tags": []
     },
     {
-      "id": "cmn78tm5v00003b6q14sv5idk",
-      "name": "aaaaa",
-      "folderId": "1774515132561",
-      "userId": "1773218175237",
-      "size": 855060,
-      "ext": "aaaaa",
-      "modified": "2026-03-26",
-      "tags": []
-    },
-    {
       "id": "cmn78tsi700013b6qf1rdc2dd",
       "name": "bbbbbb",
       "folderId": "1774375056394",
@@ -160,6 +294,36 @@
       "size": 879319,
       "ext": "bbbbbb",
       "modified": "2026-03-26",
+      "tags": []
+    },
+    {
+      "id": "cmnd969u200013b6q8ikhudl2",
+      "name": "test-pdf.pdf",
+      "folderId": "1774879029890",
+      "userId": "1773218175237",
+      "size": 4911,
+      "ext": "pdf",
+      "modified": "2026-03-30",
+      "tags": []
+    },
+    {
+      "id": "cmndmnkf100033b6q3pgjsvfe",
+      "name": "testtest-pdf.pdf",
+      "folderId": "cmndmmemv00013b6q7hof5n8k",
+      "userId": "1774901563822",
+      "size": 4911,
+      "ext": "pdf",
+      "modified": "2026-03-30",
+      "tags": []
+    },
+    {
+      "id": "cmndmrqmj000d3b6q4ashq9kv",
+      "name": "styles.css",
+      "folderId": "1774901884207",
+      "userId": "1774901563822",
+      "size": 1923,
+      "ext": "css",
+      "modified": "2026-03-30",
       "tags": []
     }
   ],
@@ -233,6 +397,297 @@
       "username": "vexhita",
       "password": "Vexhita1111",
       "role": "user"
+    },
+    {
+      "id": "1774901563822",
+      "name": "Test Test",
+      "username": "test",
+      "password": "Test123",
+      "role": "user"
+    }
+  ],
+  "history": [
+    {
+      "id": "cmnd9hazu00003b6qgmjr5oi8",
+      "userId": "1773218175237",
+      "entityType": "file",
+      "entityId": "cmn78tm5v00003b6q14sv5idk",
+      "action": "delete",
+      "entityName": "dawdawfawf",
+      "timestamp": "2026-03-30T14:06:28.074Z",
+      "previousState": {
+        "id": "cmn78tm5v00003b6q14sv5idk",
+        "name": "dawdawfawf",
+        "folderId": "1774515132561",
+        "userId": "1773218175237",
+        "size": 855060,
+        "ext": "aaaaa",
+        "modified": "2026-03-26",
+        "tags": []
+      },
+      "newState": null,
+      "rolledBack": true
+    },
+    {
+      "id": "cmnd9hq5h00013b6qti72zu2s",
+      "userId": "1773218175237",
+      "entityType": "file",
+      "entityId": "cmn78tm5v00003b6q14sv5idk",
+      "action": "delete",
+      "entityName": "dawdawfawf",
+      "timestamp": "2026-03-30T14:06:47.717Z",
+      "previousState": {
+        "id": "cmn78tm5v00003b6q14sv5idk",
+        "name": "dawdawfawf",
+        "folderId": "1774515132561",
+        "userId": "1773218175237",
+        "size": 855060,
+        "ext": "aaaaa",
+        "modified": "2026-03-26",
+        "tags": []
+      },
+      "newState": null,
+      "rolledBack": false
+    },
+    {
+      "id": "cmnd9i5q200023b6qtwqj84g6",
+      "userId": "1773218175237",
+      "entityType": "file",
+      "entityId": "cmnd969u200013b6q8ikhudl2",
+      "action": "rename",
+      "entityName": "testtest-pdf.pdf",
+      "timestamp": "2026-03-30T14:07:07.898Z",
+      "previousState": {
+        "name": "testtest-pdf.pdf"
+      },
+      "newState": {
+        "name": "test-pdf.pdf"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmnd9md4n00003b6qqit66h3a",
+      "userId": "1773218175237",
+      "entityType": "file",
+      "entityId": "cmnd969u200013b6q8ikhudl2",
+      "action": "rename",
+      "entityName": "test-pdf.pdf",
+      "timestamp": "2026-03-30T14:10:24.119Z",
+      "previousState": {
+        "name": "test-pdf.pdf"
+      },
+      "newState": {
+        "name": "testtest-pdf.pdf"
+      },
+      "rolledBack": true
+    },
+    {
+      "id": "cmndmll9z00003b6qmnas7gd5",
+      "userId": "1774901563822",
+      "entityType": "folder",
+      "entityId": "1774901623017",
+      "action": "create",
+      "entityName": "folder 1",
+      "timestamp": "2026-03-30T20:13:43.031Z",
+      "previousState": null,
+      "newState": {
+        "id": "1774901623017",
+        "name": "folder 1",
+        "parentId": null,
+        "userId": "1774901563822"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndmmen600023b6qlcwwqy2i",
+      "userId": "1774901563822",
+      "entityType": "folder",
+      "entityId": "cmndmmemv00013b6q7hof5n8k",
+      "action": "create",
+      "entityName": "subfolder",
+      "timestamp": "2026-03-30T20:14:21.090Z",
+      "previousState": null,
+      "newState": {
+        "id": "cmndmmemv00013b6q7hof5n8k",
+        "name": "subfolder",
+        "parentId": "1774901623017",
+        "userId": "1774901563822"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndmnkfk00043b6q0tdh6b51",
+      "userId": "1774901563822",
+      "entityType": "file",
+      "entityId": "cmndmnkf100033b6q3pgjsvfe",
+      "action": "create",
+      "entityName": "test-pdf.pdf",
+      "timestamp": "2026-03-30T20:15:15.248Z",
+      "previousState": null,
+      "newState": {
+        "id": "cmndmnkf100033b6q3pgjsvfe",
+        "name": "test-pdf.pdf",
+        "folderId": "cmndmmemv00013b6q7hof5n8k",
+        "userId": "1774901563822",
+        "size": 4911,
+        "ext": "pdf",
+        "modified": "2026-03-30",
+        "tags": []
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndmorqv00053b6qqfmv8a95",
+      "userId": "1774901563822",
+      "entityType": "file",
+      "entityId": "cmndmnkf100033b6q3pgjsvfe",
+      "action": "rename",
+      "entityName": "test-pdf.pdf",
+      "timestamp": "2026-03-30T20:16:11.383Z",
+      "previousState": {
+        "name": "test-pdf.pdf"
+      },
+      "newState": {
+        "name": "testtest-pdf.pdf"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndmp84300063b6qboftc93a",
+      "userId": "1774901563822",
+      "entityType": "folder",
+      "entityId": "1774901792584",
+      "action": "create",
+      "entityName": "folder 2",
+      "timestamp": "2026-03-30T20:16:32.595Z",
+      "previousState": null,
+      "newState": {
+        "id": "1774901792584",
+        "name": "folder 2",
+        "parentId": null,
+        "userId": "1774901563822"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndmptx800073b6qj3d7886h",
+      "userId": "1774901563822",
+      "entityType": "folder",
+      "entityId": "1774901820850",
+      "action": "create",
+      "entityName": "subfolder 2",
+      "timestamp": "2026-03-30T20:17:00.860Z",
+      "previousState": null,
+      "newState": {
+        "id": "1774901820850",
+        "name": "subfolder 2",
+        "parentId": null,
+        "userId": "1774901563822"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndmpyf500083b6qwehiia9g",
+      "userId": "1774901563822",
+      "entityType": "folder",
+      "entityId": "1774901826680",
+      "action": "create",
+      "entityName": "subfolder 3",
+      "timestamp": "2026-03-30T20:17:06.689Z",
+      "previousState": null,
+      "newState": {
+        "id": "1774901826680",
+        "name": "subfolder 3",
+        "parentId": "1774901820850",
+        "userId": "1774901563822"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndmqfe300093b6q4oompktf",
+      "userId": "1774901563822",
+      "entityType": "folder",
+      "entityId": "1774901826680",
+      "action": "move",
+      "entityName": "subfolder 3",
+      "timestamp": "2026-03-30T20:17:28.683Z",
+      "previousState": {
+        "parentId": null
+      },
+      "newState": {
+        "parentId": "1774901792584"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndmqfe3000a3b6q7c0wfzh6",
+      "userId": "1774901563822",
+      "entityType": "folder",
+      "entityId": "1774901820850",
+      "action": "move",
+      "entityName": "subfolder 2",
+      "timestamp": "2026-03-30T20:17:28.683Z",
+      "previousState": {
+        "parentId": null
+      },
+      "newState": {
+        "parentId": "1774901792584"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndmqfe4000b3b6qafrprfhd",
+      "userId": "1774901563822",
+      "entityType": "folder",
+      "entityId": "cmndmmemv00013b6q7hof5n8k",
+      "action": "move",
+      "entityName": "subfolder",
+      "timestamp": "2026-03-30T20:17:28.684Z",
+      "previousState": {
+        "parentId": null
+      },
+      "newState": {
+        "parentId": "1774901792584"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndmr6t7000c3b6q6wsuax22",
+      "userId": "1774901563822",
+      "entityType": "folder",
+      "entityId": "1774901884207",
+      "action": "create",
+      "entityName": "kledi",
+      "timestamp": "2026-03-30T20:18:04.219Z",
+      "previousState": null,
+      "newState": {
+        "id": "1774901884207",
+        "name": "kledi",
+        "parentId": null,
+        "userId": "1774901563822"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndmrqmv000e3b6q5uruci5t",
+      "userId": "1774901563822",
+      "entityType": "file",
+      "entityId": "cmndmrqmj000d3b6q4ashq9kv",
+      "action": "create",
+      "entityName": "styles.css",
+      "timestamp": "2026-03-30T20:18:29.911Z",
+      "previousState": null,
+      "newState": {
+        "id": "cmndmrqmj000d3b6q4ashq9kv",
+        "name": "styles.css",
+        "folderId": "1774901884207",
+        "userId": "1774901563822",
+        "size": 1923,
+        "ext": "css",
+        "modified": "2026-03-30",
+        "tags": []
+      },
+      "rolledBack": false
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

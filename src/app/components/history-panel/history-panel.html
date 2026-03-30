@@ -1,0 +1,62 @@
+<div class="d-flex flex-column h-100">
+
+  <div class="d-flex align-items-center justify-content-between px-3 py-2 border-bottom flex-shrink-0">
+    <span class="small text-uppercase fw-semibold" style="font-size: 11px; letter-spacing: 0.08em">
+      <i class="bi bi-clock-history me-1"></i>History
+    </span>
+    <div class="d-flex gap-1">
+      @if (records.length > 0) {
+        <button class="btn btn-sm btn-outline-danger py-0 px-1" (click)="clearAll()" title="Clear all">
+          <i class="bi bi-trash3 small"></i>
+        </button>
+      }
+      <button class="btn btn-sm btn-outline-secondary py-0 px-1" (click)="close.emit()" title="Close">
+        <i class="bi bi-x small"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex-grow-1 overflow-auto">
+    @if (loading) {
+      <div class="d-flex justify-content-center py-4">
+        <div class="spinner-border spinner-border-sm text-secondary"></div>
+      </div>
+    } @else if (records.length === 0) {
+      <div class="d-flex flex-column align-items-center justify-content-center py-5 text-muted">
+        <i class="bi bi-clock-history fs-2"></i>
+        <p class="small mt-2 mb-0">No history yet.</p>
+      </div>
+    } @else {
+      <div class="p-2">
+        @for (record of records; track record.id) {
+          <div
+            class="d-flex align-items-start gap-2 px-2 py-2 rounded mb-1"
+            [class.opacity-50]="record.rolledBack"
+          >
+            <i class="bi {{ getIcon(record.action) }} {{ getIconColor(record.action) }} mt-1" style="font-size: 14px"></i>
+            <div class="flex-grow-1" style="min-width: 0">
+              <div class="small" style="word-break: break-word">{{ getDescription(record) }}</div>
+              <div class="d-flex align-items-center gap-2" style="font-size: 11px">
+                <span class="text-muted">{{ getTimeAgo(record.timestamp) }}</span>
+                <span class="badge bg-secondary" style="font-size: 9px">{{ record.entityType | uppercase }}</span>
+              </div>
+            </div>
+            <div class="flex-shrink-0">
+              @if (!record.rolledBack) {
+                <button
+                  class="btn btn-sm btn-outline-secondary py-0 px-1"
+                  (click)="rollback(record)"
+                  title="Undo this change"
+                >
+                  <i class="bi bi-arrow-counterclockwise small"></i>
+                </button>
+              } @else {
+                <span class="badge bg-secondary" style="font-size: 9px">Undone</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

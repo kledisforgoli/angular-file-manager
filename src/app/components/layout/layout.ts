@@ -7,17 +7,19 @@ import { User } from '../../models/user.model';
 import { SidebarComponent } from '../sidebar/sidebar';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb';
 import { FileListComponent } from '../file-list/file-list';
+import { HistoryPanelComponent } from '../history-panel/history-panel';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, BreadcrumbComponent, FileListComponent],
+  imports: [CommonModule, SidebarComponent, BreadcrumbComponent, FileListComponent, HistoryPanelComponent],
   templateUrl: './layout.html',
   styleUrl: './layout.css'
 })
 export class LayoutComponent implements OnInit {
   currentUser: User | null = null;
   sidebarOpen = true;
+  showHistoryPanel = false;
   selectedFolderId: string | number = 0;
   isMobile = false;
 
@@ -45,6 +47,10 @@ export class LayoutComponent implements OnInit {
 
   toggleSidebar(): void {
     this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  toggleHistoryPanel(): void {
+    this.showHistoryPanel = !this.showHistoryPanel;
   }
 
   onFolderSelected(folderId: string | number): void {

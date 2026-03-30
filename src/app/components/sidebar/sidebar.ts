@@ -4,7 +4,10 @@ import { FolderService } from '../../services/folder.service';
 import { FileService } from '../../services/file.service';
 import { Folder } from '../../models/folder.model';
 import { AuthService } from '../../services/auth.service';
+import { HistoryService } from '../../services/history.service';
+import { HistoryActionType, HistoryEntityType, HistoryRecord } from '../../models/history.model';
 import { FormsModule } from '@angular/forms';
+import cuid from 'cuid';
 
 @Component({
   selector: 'app-sidebar',
@@ -38,8 +41,32 @@ export class SidebarComponent implements OnInit {
     private folderService: FolderService,
     private fileService: FileService,
     private authService: AuthService,
+    private historyService: HistoryService,
     private cdr: ChangeDetectorRef,
   ) {}
+
+  private recordHistory(
+    action: HistoryActionType,
+    entityType: HistoryEntityType,
+    entityId: string | number,
+    entityName: string,
+    previousState: Record<string, any> | null,
+    newState: Record<string, any> | null,
+  ): void {
+    const record: HistoryRecord = {
+      id: cuid(),
+      userId: String(this.authService.getCurrentUser()?.id ?? ''),
+      entityType,
+      entityId,
+      action,
+      entityName,
+      timestamp: new Date().toISOString(),
+      previousState,
+      newState,
+      rolledBack: false,
+    };
+    this.historyService.addRecord(record).subscribe();
+  }
 
   ngOnInit(): void {
     this.isAdmin = this.authService.isAdmin();
@@ -104,6 +131,7 @@ export class SidebarComponent implements OnInit {
 
     this.folderService.createFolder(newFolder).subscribe({
       next: () => {
+        this.recordHistory('create', 'folder', newId, folder.name!, null, { ...folder });
         this.newFolderName = '';
         this.showNewFolderInput = false;
         this.folderSelected.emit(newId);
@@ -121,13 +149,14 @@ export class SidebarComponent implements OnInit {
   deleteFolder(id: string | number, event: Event): void {
     event.stopPropagation();
     this.openConfirm('Are you sure you want to delete this folder?', () => {
-      
+      const snapshot = this.folders.find((f) => String(f.id) === String(id));
       this.folders = this.folders.filter((f) => String(f.id) !== String(id));
       this.buildTree();
       this.cdr.detectChanges();
 
       this.folderService.deleteFolder(id).subscribe({
         next: () => {
+          if (snapshot) this.recordHistory('delete', 'folder', id, snapshot.name, { ...snapshot }, null);
           if (String(this.selectedFolderId) === String(id)) {
             this.folderSelected.emit(0);
           }

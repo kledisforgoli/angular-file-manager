@@ -4,8 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { FileService } from '../../services/file.service';
 import { FolderService } from '../../services/folder.service';
 import { AuthService } from '../../services/auth.service';
+import { HistoryService } from '../../services/history.service';
 import { File } from '../../models/file.model';
 import { Folder } from '../../models/folder.model';
+import { HistoryActionType, HistoryEntityType, HistoryRecord } from '../../models/history.model';
 import cuid from 'cuid';
 
 @Component({
@@ -64,6 +66,7 @@ export class FileListComponent implements OnChanges, OnInit {
     private fileService: FileService,
     private folderService: FolderService,
     private authService: AuthService,
+    private historyService: HistoryService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -182,6 +185,7 @@ export class FileListComponent implements OnChanges, OnInit {
     this.showToast('File uploaded successfully!', 'success');
     this.fileService.uploadFile(file as unknown as File).subscribe({
       next: () => {
+        this.recordHistory('create', 'file', file.id, file.name, null, { ...file });
         this.loadAll();
       },
     });
@@ -198,6 +202,7 @@ export class FileListComponent implements OnChanges, OnInit {
     };
     this.folderService.createFolder(folder as unknown as Folder).subscribe({
       next: () => {
+        this.recordHistory('create', 'folder', newId, folder.name, null, { ...folder });
         this.showNewFolderModal = false;
         this.newFolderName = '';
         this.folderSelected.emit(newId);
@@ -216,20 +221,35 @@ export class FileListComponent implements OnChanges, OnInit {
 
   confirmRename(): void {
     if (!this.renameValue.trim() || !this.renameId) return;
+    const oldName = this.renameType === 'file'
+      ? this.allFiles.find((f) => f.id === this.renameId)?.name ?? ''
+      : this.folders.find((f) => f.id === this.renameId)?.name ?? '';
+    const newName = this.renameValue.trim();
+    const renameId = this.renameId;
+    this.showRenameModal = false;
     if (this.renameType === 'file') {
-      this.fileService.updateFile(this.renameId, { name: this.renameValue }).subscribe({
+      const file = this.allFiles.find((f) => f.id === renameId);
+      if (file) file.name = newName;
+      this.applyFilters();
+      this.cdr.detectChanges();
+      this.showToast('Renamed successfully!', 'success');
+      this.fileService.updateFile(renameId, { name: newName }).subscribe({
         next: () => {
+          this.recordHistory('rename', 'file', renameId!, oldName, { name: oldName }, { name: newName });
           this.loadAll();
-          this.showRenameModal = false;
-          this.showToast('Renamed successfully!', 'success');
         },
       });
     } else {
-      this.folderService.updateFolder(this.renameId, { name: this.renameValue }).subscribe({
+      const folder = this.folders.find((f) => f.id === renameId);
+      if (folder) folder.name = newName;
+      this.subFolders = this.getSubFolders();
+      this.cdr.detectChanges();
+      this.showToast('Renamed successfully!', 'success');
+      this.folderService.updateFolder(renameId, { name: newName }).subscribe({
         next: () => {
+          this.recordHistory('rename', 'folder', renameId!, oldName, { name: oldName }, { name: newName });
+          this.folderService.folderChanged$.next();
           this.loadAll();
-          this.showRenameModal = false;
-          this.showToast('Renamed successfully!', 'success');
         },
       });
     }
@@ -243,11 +263,13 @@ export class FileListComponent implements OnChanges, OnInit {
 
   deleteFile(id: string | number): void {
     this.openConfirm('Are you sure you want to delete this file?', () => {
+      const snapshot = this.allFiles.find((f) => String(f.id) === String(id));
       this.allFiles = this.allFiles.filter((f) => String(f.id) !== String(id));
       this.applyFilters();
       this.cdr.detectChanges();
       this.fileService.deleteFile(id).subscribe({
         next: () => {
+          if (snapshot) this.recordHistory('delete', 'file', id, snapshot.name, { ...snapshot }, null);
           this.loadAll();
           this.showToast('File deleted.', 'warning');
         },
@@ -257,8 +279,10 @@ export class FileListComponent implements OnChanges, OnInit {
 
   deleteFolder(id: string | number): void {
     this.openConfirm('Are you sure you want to delete this folder?', () => {
+      const snapshot = this.folders.find((f) => String(f.id) === String(id));
       this.folderService.deleteFolder(id).subscribe({
         next: () => {
+          if (snapshot) this.recordHistory('delete', 'folder', id, snapshot.name, { ...snapshot }, null);
           this.loadAll();
           this.showToast('Folder deleted.', 'warning');
         },
@@ -275,6 +299,9 @@ export class FileListComponent implements OnChanges, OnInit {
         const fileIds = ids.filter((id) => this.allFiles.some((f) => f.id === id));
         const folderIds = ids.filter((id) => this.folders.some((f) => f.id === id));
 
+        const fileSnapshots = fileIds.map((id) => this.allFiles.find((f) => f.id === id)).filter(Boolean);
+        const folderSnapshots = folderIds.map((id) => this.folders.find((f) => f.id === id)).filter(Boolean);
+
         this.allFiles = this.allFiles.filter((f) => !fileIds.includes(f.id));
         this.folders = this.folders.filter((f) => !folderIds.includes(f.id!));
         this.selectedItems = [];
@@ -287,6 +314,12 @@ export class FileListComponent implements OnChanges, OnInit {
         const onComplete = () => {
           completed++;
           if (completed === total) {
+            for (const s of fileSnapshots) {
+              this.recordHistory('delete', 'file', s!.id, s!.name, { ...s! }, null);
+            }
+            for (const s of folderSnapshots) {
+              this.recordHistory('delete', 'folder', s!.id!, s!.name, { ...s! }, null);
+            }
             this.loadAll();
             this.showToast('Items deleted.', 'warning');
           }
@@ -366,6 +399,29 @@ export class FileListComponent implements OnChanges, OnInit {
     this.applyFilters();
   }
 
+  private recordHistory(
+    action: HistoryActionType,
+    entityType: HistoryEntityType,
+    entityId: string | number,
+    entityName: string,
+    previousState: Record<string, any> | null,
+    newState: Record<string, any> | null,
+  ): void {
+    const record: HistoryRecord = {
+      id: cuid(),
+      userId: String(this.authService.getCurrentUser()?.id ?? ''),
+      entityType,
+      entityId,
+      action,
+      entityName,
+      timestamp: new Date().toISOString(),
+      previousState,
+      newState,
+      rolledBack: false,
+    };
+    this.historyService.addRecord(record).subscribe();
+  }
+
   showToast(message: string, type: string): void {
     this.toast = { message, type };
     this.cdr.detectChanges();
@@ -410,13 +466,20 @@ export class FileListComponent implements OnChanges, OnInit {
     const fileIds = ids.filter((id) => this.allFiles.some((f) => f.id === id));
     const folderIds = ids.filter((id) => this.folders.some((f) => f.id === id));
 
+    const moveSnapshots: { id: string | number; name: string; type: 'file' | 'folder'; prevKey: string; prevVal: any }[] = [];
     for (const fid of fileIds) {
       const file = this.allFiles.find((f) => f.id === fid);
-      if (file) file.folderId = actualParent;
+      if (file) {
+        moveSnapshots.push({ id: fid, name: file.name, type: 'file', prevKey: 'folderId', prevVal: file.folderId });
+        file.folderId = actualParent;
+      }
     }
     for (const fid of folderIds) {
       const folder = this.folders.find((f) => f.id === fid);
-      if (folder) folder.parentId = actualParent;
+      if (folder) {
+        moveSnapshots.push({ id: fid, name: folder.name, type: 'folder', prevKey: 'parentId', prevVal: folder.parentId });
+        folder.parentId = actualParent;
+      }
     }
 
     this.showMoveModal = false;
@@ -431,6 +494,11 @@ export class FileListComponent implements OnChanges, OnInit {
     const onComplete = () => {
       completed++;
       if (completed === total) {
+        for (const snap of moveSnapshots) {
+          this.recordHistory('move', snap.type, snap.id, snap.name,
+            { [snap.prevKey]: snap.prevVal },
+            { [snap.prevKey]: actualParent });
+        }
         if (folderIds.length) this.folderService.folderChanged$.next();
         this.loadAll();
         this.showToast(`Moved ${total} item(s) successfully.`, 'success');
@@ -496,11 +564,13 @@ export class FileListComponent implements OnChanges, OnInit {
     const folderItems = validItems.filter((i) => i.type === 'folder');
 
     const rollbacks: (() => void)[] = [];
+    const dropSnapshots: { id: string; name: string; type: 'file' | 'folder'; prevKey: string; prevVal: any }[] = [];
 
     for (const fi of fileItems) {
       const file = this.allFiles.find((f) => String(f.id) === fi.id);
       if (!file) continue;
       const prev = file.folderId;
+      dropSnapshots.push({ id: fi.id, name: file.name, type: 'file', prevKey: 'folderId', prevVal: prev });
       file.folderId = String(targetFolderId);
       rollbacks.push(() => { file.folderId = prev; });
     }
@@ -509,6 +579,7 @@ export class FileListComponent implements OnChanges, OnInit {
       const folder = this.folders.find((f) => String(f.id) === fi.id);
       if (!folder) continue;
       const prev = folder.parentId;
+      dropSnapshots.push({ id: fi.id, name: folder.name, type: 'folder', prevKey: 'parentId', prevVal: prev });
       folder.parentId = String(targetFolderId);
       rollbacks.push(() => { folder.parentId = prev; });
     }
@@ -533,6 +604,11 @@ export class FileListComponent implements OnChanges, OnInit {
           this.cdr.detectChanges();
           this.showToast('Failed to move some items.', 'warning');
         } else {
+          for (const snap of dropSnapshots) {
+            this.recordHistory('move', snap.type, snap.id, snap.name,
+              { [snap.prevKey]: snap.prevVal },
+              { [snap.prevKey]: String(targetFolderId) });
+          }
           this.showToast(`Moved ${total} item(s) successfully.`, 'success');
         }
         if (folderItems.length) this.folderService.folderChanged$.next();

@@ -32,6 +32,14 @@
 
       <button
         class="btn btn-sm btn-outline-secondary"
+        (click)="toggleHistoryPanel()"
+        title="Version History"
+      >
+        <i class="bi bi-clock-history"></i>
+      </button>
+
+      <button
+        class="btn btn-sm btn-outline-secondary"
         (click)="themeService.toggleTheme()"
         [title]="themeService.darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
       >
@@ -86,5 +94,34 @@
         (folderSelected)="onFolderSelected($event)"
       />
     </div>
+
+    @if (showHistoryPanel) {
+      @if (isMobile) {
+        <div
+          class="position-fixed start-0 w-100 bg-dark bg-opacity-50"
+          style="z-index: 1040; top: 52px; bottom: 0"
+          (click)="showHistoryPanel = false"
+        ></div>
+        <div
+          class="position-fixed overflow-auto border-start"
+          [class.bg-dark]="themeService.darkMode"
+          [class.bg-white]="!themeService.darkMode"
+          [class.text-white]="themeService.darkMode"
+          style="z-index: 1050; top: 52px; bottom: 0; right: 0; width: 85vw; max-width: 320px"
+        >
+          <app-history-panel (close)="showHistoryPanel = false" />
+        </div>
+      } @else {
+        <div
+          class="border-start overflow-auto"
+          [class.bg-dark]="themeService.darkMode"
+          [class.bg-white]="!themeService.darkMode"
+          [class.text-white]="themeService.darkMode"
+          style="width: 320px; min-width: 320px"
+        >
+          <app-history-panel (close)="showHistoryPanel = false" />
+        </div>
+      }
+    }
   </div>
 </div>
