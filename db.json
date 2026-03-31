@@ -367,6 +367,16 @@
       "ext": "png",
       "modified": "2026-03-31",
       "tags": []
+    },
+    {
+      "id": "cmne30tml00003b6qdtti3imp",
+      "name": "index.html",
+      "folderId": "1774912730807",
+      "userId": "1774901563822",
+      "size": 13129,
+      "ext": "html",
+      "modified": "2026-03-31",
+      "tags": []
     }
   ],
   "users": [
@@ -790,6 +800,27 @@
       },
       "newState": {
         "name": "NEW FOLDER"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmne30tnb00013b6qousrhfbi",
+      "userId": "1774901563822",
+      "entityType": "file",
+      "entityId": "cmne30tml00003b6qdtti3imp",
+      "action": "create",
+      "entityName": "index.html",
+      "timestamp": "2026-03-31T03:53:27.575Z",
+      "previousState": null,
+      "newState": {
+        "id": "cmne30tml00003b6qdtti3imp",
+        "name": "index.html",
+        "folderId": "1774912730807",
+        "userId": "1774901563822",
+        "size": 13129,
+        "ext": "html",
+        "modified": "2026-03-31",
+        "tags": []
       },
       "rolledBack": false
     }

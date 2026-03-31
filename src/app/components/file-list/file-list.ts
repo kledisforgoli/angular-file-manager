@@ -105,6 +105,9 @@ export class FileListComponent implements OnChanges, OnInit {
       result = this.allFiles.filter((f) =>
         f.name.toLowerCase().includes(this.searchQuery.toLowerCase()),
       );
+      this.subFolders = this.folders.filter((f) =>
+        f.name.toLowerCase().includes(this.searchQuery.toLowerCase()),
+      );
     } else {
       result = this.allFiles.filter((f) => {
         if (this.selectedFolderId == 0) {
@@ -115,6 +118,11 @@ export class FileListComponent implements OnChanges, OnInit {
 
       if (this.searchQuery) {
         result = result.filter((f) => f.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        this.subFolders = this.getSubFolders().filter((f) =>
+          f.name.toLowerCase().includes(this.searchQuery.toLowerCase()),
+        );
+      } else {
+        this.subFolders = this.getSubFolders();
       }
     }
 
