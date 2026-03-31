@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, Subject, map } from 'rxjs';
 import { File } from '../models/file.model';
 import { AuthService } from './auth.service';
 
@@ -9,6 +9,8 @@ import { AuthService } from './auth.service';
 })
 export class FileService {
   private apiUrl = 'http://localhost:3000/files';
+
+  fileChanged$ = new Subject<{ movedIds: string[]; newFolderId: string | null }>();
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

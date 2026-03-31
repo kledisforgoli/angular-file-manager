@@ -341,7 +341,7 @@
     {
       "id": "cmndmv23e000f3b6q7ykjp9dx",
       "name": "index.HTML",
-      "folderId": "1774901884207",
+      "folderId": "1774912730807",
       "userId": "1774901563822",
       "size": 3146,
       "ext": "html",
@@ -351,7 +351,7 @@
     {
       "id": "cmndmvhla000h3b6q7wfoclf3",
       "name": "test-pdf.pdf",
-      "folderId": "1774901884207",
+      "folderId": "1774912730807",
       "userId": "1774901563822",
       "size": 4911,
       "ext": "pdf",
@@ -371,10 +371,20 @@
     {
       "id": "cmne30tml00003b6qdtti3imp",
       "name": "index.html",
-      "folderId": "1774912730807",
+      "folderId": "1774901884207",
       "userId": "1774901563822",
       "size": 13129,
       "ext": "html",
+      "modified": "2026-03-31",
+      "tags": []
+    },
+    {
+      "id": "cmne6n82h00003b6qjihbr97s",
+      "name": "maze.js",
+      "folderId": "1774901623017",
+      "userId": "1774901563822",
+      "size": 1300,
+      "ext": "js",
       "modified": "2026-03-31",
       "tags": []
     }
@@ -819,6 +829,27 @@
         "userId": "1774901563822",
         "size": 13129,
         "ext": "html",
+        "modified": "2026-03-31",
+        "tags": []
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmne6n82t00013b6qddtfdcry",
+      "userId": "1774901563822",
+      "entityType": "file",
+      "entityId": "cmne6n82h00003b6qjihbr97s",
+      "action": "create",
+      "entityName": "maze.js",
+      "timestamp": "2026-03-31T05:34:51.558Z",
+      "previousState": null,
+      "newState": {
+        "id": "cmne6n82h00003b6qjihbr97s",
+        "name": "maze.js",
+        "folderId": "1774901623017",
+        "userId": "1774901563822",
+        "size": 1300,
+        "ext": "js",
         "modified": "2026-03-31",
         "tags": []
       },

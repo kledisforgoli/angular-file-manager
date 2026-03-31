@@ -235,6 +235,13 @@ export class SidebarComponent implements OnInit {
       this.cdr.detectChanges();
     }
 
+    if (fileItems.length) {
+      this.fileService.fileChanged$.next({
+        movedIds: fileItems.map((fi) => fi.id),
+        newFolderId: actualParent,
+      });
+    }
+
     let completed = 0;
     const total = validItems.length;
     let hasError = false;

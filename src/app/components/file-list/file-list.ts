@@ -77,6 +77,15 @@ export class FileListComponent implements OnChanges, OnInit {
     this.folderService.folderChanged$.subscribe(() => {
       this.loadAll();
     });
+
+    this.fileService.fileChanged$.subscribe(({ movedIds, newFolderId }) => {
+      for (const id of movedIds) {
+        const file = this.allFiles.find((f) => String(f.id) === id);
+        if (file) file.folderId = newFolderId;
+      }
+      this.applyFilters();
+      this.cdr.detectChanges();
+    });
   }
 
   ngOnChanges(): void {
