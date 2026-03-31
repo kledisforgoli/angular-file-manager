@@ -233,6 +233,18 @@
       "name": "kledi",
       "parentId": null,
       "userId": "1774901563822"
+    },
+    {
+      "id": "1774912730807",
+      "name": "kledis",
+      "parentId": null,
+      "userId": "1774901563822"
+    },
+    {
+      "id": "cmne0dnz200003b6qocg49gjo",
+      "name": "NEW FOLDER",
+      "parentId": null,
+      "userId": "1774924750374"
     }
   ],
   "files": [
@@ -325,6 +337,36 @@
       "ext": "css",
       "modified": "2026-03-30",
       "tags": []
+    },
+    {
+      "id": "cmndmv23e000f3b6q7ykjp9dx",
+      "name": "index.HTML",
+      "folderId": "1774901884207",
+      "userId": "1774901563822",
+      "size": 3146,
+      "ext": "html",
+      "modified": "2026-03-30",
+      "tags": []
+    },
+    {
+      "id": "cmndmvhla000h3b6q7wfoclf3",
+      "name": "test-pdf.pdf",
+      "folderId": "1774901884207",
+      "userId": "1774901563822",
+      "size": 4911,
+      "ext": "pdf",
+      "modified": "2026-03-30",
+      "tags": []
+    },
+    {
+      "id": "cmne0ean400023b6qhy4vto57",
+      "name": "shared-folder.png",
+      "folderId": "cmne0dnz200003b6qocg49gjo",
+      "userId": "1774924750374",
+      "size": 18159,
+      "ext": "png",
+      "modified": "2026-03-31",
+      "tags": []
     }
   ],
   "users": [
@@ -404,83 +446,16 @@
       "username": "test",
       "password": "Test123",
       "role": "user"
+    },
+    {
+      "id": "1774924750374",
+      "name": "laptop",
+      "username": "laptop",
+      "password": "laptop",
+      "role": "user"
     }
   ],
   "history": [
-    {
-      "id": "cmnd9hazu00003b6qgmjr5oi8",
-      "userId": "1773218175237",
-      "entityType": "file",
-      "entityId": "cmn78tm5v00003b6q14sv5idk",
-      "action": "delete",
-      "entityName": "dawdawfawf",
-      "timestamp": "2026-03-30T14:06:28.074Z",
-      "previousState": {
-        "id": "cmn78tm5v00003b6q14sv5idk",
-        "name": "dawdawfawf",
-        "folderId": "1774515132561",
-        "userId": "1773218175237",
-        "size": 855060,
-        "ext": "aaaaa",
-        "modified": "2026-03-26",
-        "tags": []
-      },
-      "newState": null,
-      "rolledBack": true
-    },
-    {
-      "id": "cmnd9hq5h00013b6qti72zu2s",
-      "userId": "1773218175237",
-      "entityType": "file",
-      "entityId": "cmn78tm5v00003b6q14sv5idk",
-      "action": "delete",
-      "entityName": "dawdawfawf",
-      "timestamp": "2026-03-30T14:06:47.717Z",
-      "previousState": {
-        "id": "cmn78tm5v00003b6q14sv5idk",
-        "name": "dawdawfawf",
-        "folderId": "1774515132561",
-        "userId": "1773218175237",
-        "size": 855060,
-        "ext": "aaaaa",
-        "modified": "2026-03-26",
-        "tags": []
-      },
-      "newState": null,
-      "rolledBack": false
-    },
-    {
-      "id": "cmnd9i5q200023b6qtwqj84g6",
-      "userId": "1773218175237",
-      "entityType": "file",
-      "entityId": "cmnd969u200013b6q8ikhudl2",
-      "action": "rename",
-      "entityName": "testtest-pdf.pdf",
-      "timestamp": "2026-03-30T14:07:07.898Z",
-      "previousState": {
-        "name": "testtest-pdf.pdf"
-      },
-      "newState": {
-        "name": "test-pdf.pdf"
-      },
-      "rolledBack": false
-    },
-    {
-      "id": "cmnd9md4n00003b6qqit66h3a",
-      "userId": "1773218175237",
-      "entityType": "file",
-      "entityId": "cmnd969u200013b6q8ikhudl2",
-      "action": "rename",
-      "entityName": "test-pdf.pdf",
-      "timestamp": "2026-03-30T14:10:24.119Z",
-      "previousState": {
-        "name": "test-pdf.pdf"
-      },
-      "newState": {
-        "name": "testtest-pdf.pdf"
-      },
-      "rolledBack": true
-    },
     {
       "id": "cmndmll9z00003b6qmnas7gd5",
       "userId": "1774901563822",
@@ -686,6 +661,135 @@
         "ext": "css",
         "modified": "2026-03-30",
         "tags": []
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndmv23o000g3b6qp6c6j58o",
+      "userId": "1774901563822",
+      "entityType": "file",
+      "entityId": "cmndmv23e000f3b6q7ykjp9dx",
+      "action": "create",
+      "entityName": "index.HTML",
+      "timestamp": "2026-03-30T20:21:04.740Z",
+      "previousState": null,
+      "newState": {
+        "id": "cmndmv23e000f3b6q7ykjp9dx",
+        "name": "index.HTML",
+        "folderId": "1774901884207",
+        "userId": "1774901563822",
+        "size": 3146,
+        "ext": "html",
+        "modified": "2026-03-30",
+        "tags": []
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndmvhll000i3b6qomteihvg",
+      "userId": "1774901563822",
+      "entityType": "file",
+      "entityId": "cmndmvhla000h3b6q7wfoclf3",
+      "action": "create",
+      "entityName": "test-pdf.pdf",
+      "timestamp": "2026-03-30T20:21:24.825Z",
+      "previousState": null,
+      "newState": {
+        "id": "cmndmvhla000h3b6q7wfoclf3",
+        "name": "test-pdf.pdf",
+        "folderId": "1774901884207",
+        "userId": "1774901563822",
+        "size": 4911,
+        "ext": "pdf",
+        "modified": "2026-03-30",
+        "tags": []
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmndt7o3m00003b6qmodywqrr",
+      "userId": "1774901563822",
+      "entityType": "folder",
+      "entityId": "1774912730807",
+      "action": "create",
+      "entityName": "kledis",
+      "timestamp": "2026-03-30T23:18:50.818Z",
+      "previousState": null,
+      "newState": {
+        "id": "1774912730807",
+        "name": "kledis",
+        "parentId": null,
+        "userId": "1774901563822"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmne0dnzb00013b6qtxkfo0z6",
+      "userId": "1774924750374",
+      "entityType": "folder",
+      "entityId": "cmne0dnz200003b6qocg49gjo",
+      "action": "create",
+      "entityName": "new folder",
+      "timestamp": "2026-03-31T02:39:27.911Z",
+      "previousState": null,
+      "newState": {
+        "id": "cmne0dnz200003b6qocg49gjo",
+        "name": "new folder",
+        "parentId": null,
+        "userId": "1774924750374"
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmne0eann00033b6q2j38o9yb",
+      "userId": "1774924750374",
+      "entityType": "file",
+      "entityId": "cmne0ean400023b6qhy4vto57",
+      "action": "create",
+      "entityName": "shared-folder.png",
+      "timestamp": "2026-03-31T02:39:57.299Z",
+      "previousState": null,
+      "newState": {
+        "id": "cmne0ean400023b6qhy4vto57",
+        "name": "shared-folder.png",
+        "folderId": "cmne0dnz200003b6qocg49gjo",
+        "userId": "1774924750374",
+        "size": 18159,
+        "ext": "png",
+        "modified": "2026-03-31",
+        "tags": []
+      },
+      "rolledBack": false
+    },
+    {
+      "id": "cmne0el3g00043b6qlih0icmt",
+      "userId": "1774924750374",
+      "entityType": "file",
+      "entityId": "cmne0ean400023b6qhy4vto57",
+      "action": "rename",
+      "entityName": "shared-folder.png",
+      "timestamp": "2026-03-31T02:40:10.828Z",
+      "previousState": {
+        "name": "shared-folder.png"
+      },
+      "newState": {
+        "name": "sharedd-folder.png"
+      },
+      "rolledBack": true
+    },
+    {
+      "id": "cmne0f1ov00053b6q50i4e46l",
+      "userId": "1774924750374",
+      "entityType": "folder",
+      "entityId": "cmne0dnz200003b6qocg49gjo",
+      "action": "rename",
+      "entityName": "new folder",
+      "timestamp": "2026-03-31T02:40:32.335Z",
+      "previousState": {
+        "name": "new folder"
+      },
+      "newState": {
+        "name": "NEW FOLDER"
       },
       "rolledBack": false
     }

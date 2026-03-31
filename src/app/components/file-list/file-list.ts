@@ -635,7 +635,7 @@ export class FileListComponent implements OnChanges, OnInit {
   }
 
   navigateToFolder(id: string | number): void {
-    this.selectedFolderId = id; // ← update lokal menjëherë
+    this.selectedFolderId = id;
     this.subFolders = this.getSubFolders();
     this.applyFilters();
     this.folderSelected.emit(id);

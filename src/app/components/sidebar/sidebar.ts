@@ -162,7 +162,7 @@ export class SidebarComponent implements OnInit {
           }
           this.showToast('Folder deleted.', 'warning');
         },
-        error: () => this.loadFolders(), // rollback
+        error: () => this.loadFolders(),
       });
     });
   }
